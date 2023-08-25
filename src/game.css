@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  min-height: 100vh;
+  min-width: 100vh;
+}
+
+.timer {
+  width: 5.5rem;
+  height: 5.375rem;
+  background-color: #DFB6B2;
+  display: flex;
+  flex-direction: column; /* Define a direção da flexbox como coluna */
+  align-items: center; /* Centraliza horizontalmente */
+  justify-content: center; /* Centraliza verticalmente */
+}
+
+.genImg{
+  min-height: 30vh;
+  width: 409px;
+  height: 446px;
+  flex-shrink: 0;
+  border: 7px solid #522B5B;
+}
+
+.timerText{
+  color: rgba(82, 43, 91, 0.70);
+  font-family: Alatsi;
+  font-size: 3rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+}
+
+.logo {
+  color: #FFF;
+  font-family: Alatsi;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.inputWord{
+  width: 492px;
+  height: 48px;
+}
+
+.inputLabel{
+  color: rgba(251, 228, 216, 0.50);
+  font-family: Suez One;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 10px;
+  border: 4px solid rgba(251, 228, 216, 0.80);
+  background: #522B5B;
+  padding-left: 15px;
+}
+
+
+.inputWord{
+  width: 492px;
+  height: 48px;
+}
+
+.inputLabel{
+  color: rgba(251, 228, 216, 0.50);
+  font-family: Suez One;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 10px;
+  border: 4px solid rgba(251, 228, 216, 0.80);
+  background: #522B5B;
+  padding-left: 15px;
+}
+
+
+.App-header {
+  background-color: #241333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.divMain{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rectangle{
+  width: 19.375rem;
+  height: 2.1875rem;
+  flex-shrink: 0;
+
+  border-radius: 0.625rem;
+  border: 3px solid #B2DFC4;
+}
+
+.text-guess{
+  color: #B2DFC4;
+  text-align: center;
+  font-family: Suez One;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
