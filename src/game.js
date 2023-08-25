@@ -6,28 +6,30 @@ function GameWindow() {
     
     <div className="App">
       
-      <header className="App-header w-full">
+      <header className="App-header w-full pt-8">
         <div className='columns-2 w-full flex items-center justify-between'>
 
           <div className='pl-20'>
             <div className='timer rounded-full'><p className='timerText'>30</p></div>
           </div>
 
-          <div className='items-center content-center pr-20'>
+          <div className='items-center content-center'>
             <h1 className="logo">WHY.C</h1>
           </div>
 
-          <div className='sizeDiv pr-20'></div>
+          <div className='pr-20'>
+            <div className='timer rounded-full'><p className='timerText'>1/5</p></div>
+          </div>
         </div>
 
-        <div className='pt-10'>
+        <div className='pt-8'>
           <img src={astroImage} alt='astro' className='genImg'/>
         </div>
         
       </header>
       <div className="divMain">
         <InputGuess/>
-        <HistoryGuess className="pt-5"/>
+        <HistoryGuess/>
       </div>
       
     </div>
@@ -38,7 +40,7 @@ export default GameWindow;
 
 function InputGuess() {
   return (
-    <div className="inputWord pt-20">
+    <div className="inputWord pt-10">
         <input
           type="text"
           name="inputGuess"
@@ -53,8 +55,10 @@ function InputGuess() {
 //Aqui temos q passar uma flag (True or false) para saber se a cor será vermelho ou verde
 function HistoryGuess(){
   return(
-    <div className="rectangle">
-      <p className="text-center text-guess">homem</p>
+    <div className='pt-20'> 
+      <div className="rectangle">
+        <p className="text-center text-guess">homem</p>
+      </div>
     </div>
   )
 }

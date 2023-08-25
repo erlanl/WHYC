@@ -8,8 +8,8 @@
 }
 
 .timer {
-  width: 5.5rem;
-  height: 5.375rem;
+  width: 5.0rem;
+  height: 5.0rem;
   background-color: #DFB6B2;
   display: flex;
   flex-direction: column; /* Define a direção da flexbox como coluna */
@@ -18,9 +18,8 @@
 }
 
 .genImg{
-  min-height: 30vh;
-  width: 409px;
-  height: 446px;
+  width: 350px;
+  height: 370px;
   flex-shrink: 0;
   border: 7px solid #522B5B;
 }
@@ -28,7 +27,7 @@
 .timerText{
   color: rgba(82, 43, 91, 0.70);
   font-family: Alatsi;
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
