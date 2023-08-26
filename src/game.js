@@ -4,9 +4,9 @@ import astroImage from './images/image.png';
 function GameWindow() {
   return (
     
-    <div className="App">
+    <div className="Game">
       
-      <header className="App-header w-full pt-8">
+      <header className="Game-header w-full pt-8">
         <div className='columns-2 w-full flex items-center justify-between'>
 
           <div className='pl-20'>
@@ -31,16 +31,15 @@ function GameWindow() {
         <InputGuess/>
         <HistoryGuess/>
       </div>
-      
+
+      <Footer/>
     </div>
   );
 }
 
-export default GameWindow;
-
 function InputGuess() {
   return (
-    <div className="inputWord pt-10">
+    <div className="inputWord pt-20">
         <input
           type="text"
           name="inputGuess"
@@ -52,7 +51,6 @@ function InputGuess() {
   )
 }
 
-//Aqui temos q passar uma flag (True or false) para saber se a cor será vermelho ou verde
 function HistoryGuess(){
   return(
     <div className='pt-20'> 
@@ -62,3 +60,13 @@ function HistoryGuess(){
     </div>
   )
 }
+
+function Footer() {
+  return (
+    <footer className="p-4 mt-20">
+      <p class="text-white text-right text-xs leading-normal">Todos os direitos reservados à Los Hermanos ©</p>
+    </footer>
+  );
+}
+
+export default GameWindow;
