@@ -3,6 +3,13 @@ import './game.css';
 import astroImage from '../images/image.png';
 import Footer from './footer';
 
+var words = {
+  'homem': true,
+  'brasil' : false,
+  'astronauta' : true,
+  'terra': false
+}
+
 function GameWindow() {
   return (
     
@@ -41,7 +48,7 @@ function GameWindow() {
 
 function InputGuess() {
   return (
-    <div className="inputWord pt-20">
+    <div className="inputWord pt-10">
         <input
           type="text"
           name="inputGuess"
@@ -53,15 +60,18 @@ function InputGuess() {
   )
 }
 
-function HistoryGuess(){
-  return(
-    <div className='pt-20'> 
-      <div className="rectangle">
-        <p className="text-center text-guess">homem</p>
-      </div>
+function HistoryGuess() {
+  return (
+    <div className='pt-20'>
+      {Object.entries(words).map(([word, isTrue]) => (
+        <div className='pt-2'>
+        <div key={word} className={`rectangle ${isTrue ? 'colorRight' : 'colorWrong'} `}>
+          <p className={`text-center text-guess ${isTrue ? "text-accept" : "text-wrong"}`}>{word}</p>
+        </div>
+        </div>
+      ))}
     </div>
   )
 }
-
 
 export default GameWindow;
