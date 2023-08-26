@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './home.css';
+import Footer from './footer';
 
 function HomePage() {
   return (
-    <body className="custom-font min-h-screen bg-custom-color flex flex-col">
+    <body className="custom-font bg-custom-color flex flex-col min-h-screen">
       <Header />
       <Main />
-      <Footer />
+      <div className='mt-auto'>
+        <Footer />
+      </div>
+     
     </body>
   );
 }
@@ -32,13 +35,5 @@ function Main() {
         <button>CRIAR SALA</button>
       </Link>
     </main>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="p-4 mt-auto">
-      <p class="text-white text-right text-xs leading-normal">Todos os direitos reservados a Los Hermanos ©</p>
-    </footer>
   );
 }
