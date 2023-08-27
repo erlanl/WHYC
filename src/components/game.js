@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Popup from 'reactjs-popup';
 import './game.css';
 import astroImage from '../images/image.png';
 import Footer from './footer';
+import PopupResultado from './popupResultado';
 
 var words = {
   'homem': true,
@@ -11,6 +13,12 @@ var words = {
 }
 
 function GameWindow() {
+  const [open, setOpen] = useState(false);
+
+  const closeModel = () => {
+    setOpen(false);
+  };
+
   return (
     
     <div className="Game">
@@ -39,6 +47,15 @@ function GameWindow() {
       <div className="divMain">
         <InputGuess/>
         <HistoryGuess/>
+
+        {/* Botao temporario para ver o popup dizendo o resultado da partida */}
+        <button onClick={() => {setOpen(o => !o)}}>
+          Teste
+        </button>
+        <Popup open={open} closeOnDocumentClick={false} modal>
+          {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
+          <PopupResultado venceu={true} />
+        </Popup>
       </div>
 
       <Footer/>
