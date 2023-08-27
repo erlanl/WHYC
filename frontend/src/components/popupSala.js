@@ -2,6 +2,7 @@ import './popupSala.css'
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { SHA256 } from 'crypto-js';
 
 /*
 O primeiro parâmetro desta função é um booleano que determina qual o tipo de popup.
@@ -25,7 +26,8 @@ export default function PopupSala({ criarSala, onClose }) {
       });
 
       if (res.status === 200) {
-        navigate(`game/${sala}`);
+        const hashedRoom = SHA256(sala).toString();
+        navigate(`game/${hashedRoom}`);
       }
     } catch (err) {
       console.error(err);
@@ -45,7 +47,8 @@ export default function PopupSala({ criarSala, onClose }) {
       });
 
       if (res.status === 200) {
-        navigate(`game/${sala}`);
+        const hashedRoom = SHA256(sala).toString();
+        navigate(`game/${hashedRoom}`);
       }
     } catch (err) {
       console.error(err);
