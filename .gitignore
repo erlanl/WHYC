@@ -25,3 +25,7 @@
 /frontend/npm-debug.log*
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
+
+/.vscode
+/backend/.vscode
+/frontend/.vscode
