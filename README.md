@@ -8,7 +8,7 @@
 ## Instalando dependências
 ```shell
 # Dentro do diretório 'backend'
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Rodando o projeto
