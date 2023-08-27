@@ -88,11 +88,19 @@
   flex-shrink: 0;
 
   border-radius: 0.625rem;
+  border: 3px solid #E25555;
+  
+}
+
+.colorRight{
   border: 3px solid #B2DFC4;
 }
 
+.colorWrong{
+  border: 3px solid #E25555;
+}
+
 .text-guess{
-  color: #B2DFC4;
   text-align: center;
   font-family: Suez One;
   font-size: 1.5rem;

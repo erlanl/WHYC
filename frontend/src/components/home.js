@@ -102,11 +102,11 @@ function Main() {
             value={roomToJoin}
             onChange={(e) => setRoomToJoin(e.target.value)}
           />
-          <button onClick={handleJoinRoom}>ENTRAR</button>
-          <button onClick={handleLeaveRoom}>SAIR</button>
+          <button className='botao-home' onClick={handleJoinRoom}>ENTRAR</button>
+          <button className='botao-home' onClick={handleLeaveRoom}>SAIR</button>
         </div>
       ) : (
-        <button onClick={handlePlayClick}>JOGAR</button>
+        <button className='botao-home' onClick={handlePlayClick}>JOGAR</button>
       )}
       {showCreateBox ? (
         <div>
@@ -116,10 +116,10 @@ function Main() {
             value={roomToCreate}
             onChange={(e) => setRoomToCreate(e.target.value)}
           />
-          <button onClick={handleCreateRoom}>CRIAR</button>
+          <button className='botao-home' onClick={handleCreateRoom}>CRIAR</button>
         </div>
       ) : (
-        <button onClick={handleCreateClick}>CRIAR SALA</button>
+        <button className='botao-home' onClick={handleCreateClick}>CRIAR SALA</button>
       )}
     </main>
   );

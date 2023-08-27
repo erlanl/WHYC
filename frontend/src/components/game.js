@@ -1,9 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Popup from 'reactjs-popup';
 import './game.css';
 import astroImage from '../images/image.png';
 import Footer from './footer';
+import PopupResultado from './popupResultado';
+
+var words = {
+  'homem': true,
+  'brasil' : false,
+  'astronauta' : true,
+  'terra': false
+}
 
 function GameWindow() {
+  const [open, setOpen] = useState(false);
+
+  const closeModel = () => {
+    setOpen(false);
+  };
+
   return (
     
     <div className="Game">
@@ -32,6 +47,15 @@ function GameWindow() {
       <div className="divMain">
         <InputGuess/>
         <HistoryGuess/>
+
+        {/* Botao temporario para ver o popup dizendo o resultado da partida */}
+        <button onClick={() => {setOpen(o => !o)}}>
+          Teste
+        </button>
+        <Popup open={open} closeOnDocumentClick={false} modal>
+          {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
+          <PopupResultado venceu={true} />
+        </Popup>
       </div>
 
       <Footer/>
@@ -41,7 +65,7 @@ function GameWindow() {
 
 function InputGuess() {
   return (
-    <div className="inputWord pt-20">
+    <div className="inputWord pt-10">
         <input
           type="text"
           name="inputGuess"
@@ -53,15 +77,18 @@ function InputGuess() {
   )
 }
 
-function HistoryGuess(){
-  return(
-    <div className='pt-20'> 
-      <div className="rectangle">
-        <p className="text-center text-guess">homem</p>
-      </div>
+function HistoryGuess() {
+  return (
+    <div className='pt-20'>
+      {Object.entries(words).map(([word, isTrue]) => (
+        <div className='pt-2'>
+        <div key={word} className={`rectangle ${isTrue ? 'colorRight' : 'colorWrong'} `}>
+          <p className={`text-center text-guess ${isTrue ? "text-accept" : "text-wrong"}`}>{word}</p>
+        </div>
+        </div>
+      ))}
     </div>
   )
 }
-
 
 export default GameWindow;
