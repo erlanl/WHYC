@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import Popup from 'reactjs-popup';
 import Footer from './footer';
+import PopupSala from './popupSala';
 
 function HomePage() {
   return (
@@ -27,100 +27,32 @@ function Header() {
 }
 
 function Main() {
-  const [roomToCreate, setRoomToCreate] = useState("");
-  const [roomToJoin, setRoomToJoin] = useState("");
-  const [showJoinBox, setShowJoinBox] = useState(false);
-  const [showCreateBox, setShowCreateBox] = useState(false);
-  const navigate = useNavigate();
+  const [showJoinPopup, setShowJoinPopup] = useState(false);
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
 
   const handlePlayClick = () => {
-    setShowJoinBox(true);
+    setShowJoinPopup(true);
   };
 
   const handleCreateClick = () => {
-    setShowCreateBox(true);
+    setShowCreatePopup(true);
   };
 
-  const handleCreateRoom = async () => {
-    if (!roomToCreate) {
-      alert("Digite o ID da sala.");
-      return;
-    }
-    try {
-      const res = await axios.post("/create_room", {
-        room: roomToCreate,
-      });
-      if (res.status === 200) {
-        navigate(`game/${roomToCreate}`);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao criar sala.")
-    }
-  };
-
-  const handleJoinRoom = async () => {
-    if (!roomToJoin) {
-      alert("Digite o ID da sala.");
-      return;
-    }
-    try {
-      const res = await axios.post("/join_room", {
-        room: roomToJoin,
-      });
-      if (res.status === 200) {
-        navigate(`game/${roomToJoin}`);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao entrar na sala.");
-    }
-  };
-
-  const handleLeaveRoom = async () => {
-    if (!roomToJoin) {
-      alert("Digite o ID da sala.");
-      return;
-    }
-    try {
-      await axios.post("/leave_room", {
-        room: roomToJoin,
-      });
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao sair da sala.");
-    }
+  const handlePopupClose = () => {
+    setShowJoinPopup(false);
+    setShowCreatePopup(false);
   };
 
   return (
     <main className="custom-font flex flex-col items-center my-14">
-      {showJoinBox ? (
-        <div>
-          <input
-            type="text"
-            placeholder="ID da Sala"
-            value={roomToJoin}
-            onChange={(e) => setRoomToJoin(e.target.value)}
-          />
-          <button className='botao-home' onClick={handleJoinRoom}>ENTRAR</button>
-          <button className='botao-home' onClick={handleLeaveRoom}>SAIR</button>
-        </div>
-      ) : (
-        <button className='botao-home' onClick={handlePlayClick}>JOGAR</button>
-      )}
-      {showCreateBox ? (
-        <div>
-          <input
-            type="text"
-            placeholder="ID da Sala"
-            value={roomToCreate}
-            onChange={(e) => setRoomToCreate(e.target.value)}
-          />
-          <button className='botao-home' onClick={handleCreateRoom}>CRIAR</button>
-        </div>
-      ) : (
-        <button className='botao-home' onClick={handleCreateClick}>CRIAR SALA</button>
-      )}
+      <button className='botao-home' onClick={handlePlayClick}>JOGAR</button>
+      <Popup open={showJoinPopup} closeOnDocumentClick={false} modal>
+        <PopupSala criarSala={false} onClose={handlePopupClose} />
+      </Popup>
+      <button className='botao-home' onClick={handleCreateClick}>CRIAR SALA</button>
+      <Popup open={showCreatePopup} closeOnDocumentClick={false} modal>
+        <PopupSala criarSala={true} onClose={handlePopupClose} />
+      </Popup>
     </main>
   );
 }
