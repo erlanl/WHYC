@@ -1,16 +1,32 @@
-.bg-custom-color {
+h1 {
+  font-size: 45px;
+}
+
+custom-color {
   background-color: #241333;
+}
+
+.text-custom-color {
+  color: #522B5B;
 }
 
 .custom-font {
   font-family: 'Alatsi', sans-serif;
 }
 
-h1 {
-  font-size: 45px;
+.custom-font-inter {
+  font-family: 'Inter', sans-serif;
 }
 
-.botao-home {
+.custom-width {
+  width: 28vw;
+}
+
+.button-custom-color {
+  background: #522B5B;
+}
+
+.button-home {
   font-size: 25px;
   font-style: normal;
   color: #522B5B;
@@ -21,3 +37,10 @@ h1 {
   background: linear-gradient(180deg, #DFB6B2 0%, #C8A09C 100%);
   box-shadow: 0px -2px 2px 1px #886D6A inset, 0px 12px 16px -4px rgba(0, 0, 0, 0.04), 0px 6px 0px 0px #886D6A;
 }
+
+#button-send {
+  padding: 6px 14px;
+  border-radius: 3px;
+  font-size: 15px;
+}
+
