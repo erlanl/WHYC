@@ -29,10 +29,10 @@ function Main() {
   return (
     <main className="custom-font flex flex-col items-center my-14">
       <Link to="/game">
-        <button>JOGAR</button>
+        <button className='botao-home'>JOGAR</button>
       </Link>
       <Link to="/room">
-        <button>CRIAR SALA</button>
+        <button className='botao-home'>CRIAR SALA</button>
       </Link>
     </main>
   );
