@@ -44,3 +44,15 @@ custom-color {
   font-size: 15px;
 }
 
+.waiting {
+  border-radius: 8px;
+  background: #F4F4F4;
+}
+
+.fill-custom-color {
+  fill: #522B5B;
+}
+
+.gray {
+  color: #898888;
+}
