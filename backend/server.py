@@ -8,14 +8,14 @@ from hashlib import sha256
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "mysecretkey"
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=5)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=60)
 Session(app)
 
 socketio = SocketIO(app)
 
 active_rooms = {}
 
-SESSION_CLEANUP_INTERVAL = 60
+SESSION_CLEANUP_INTERVAL = 30
 
 def compute_hashed_room(room):
     hash_object = sha256(room.encode())
@@ -26,6 +26,7 @@ def session_cleanup():
         print("Cleaning up!")
 
         now = datetime.now()
+        empty_rooms = []
 
         for hashed_room, session_data in active_rooms.items():
             active_sessions = []
@@ -34,7 +35,13 @@ def session_cleanup():
                 if now - last_used <= app.permanent_session_lifetime:
                     active_sessions.append((session_id, last_used))
 
-            active_rooms[hashed_room] = active_sessions
+            if active_sessions:
+                active_rooms[hashed_room] = active_sessions
+            else:
+                empty_rooms.append(hashed_room)
+
+        for hashed_room in empty_rooms:
+            active_rooms.pop(hashed_room)
 
         Event().wait(SESSION_CLEANUP_INTERVAL)
 
