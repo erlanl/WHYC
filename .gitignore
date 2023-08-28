@@ -16,6 +16,8 @@
 /frontend/build
 
 # misc
+/backend/flask_session
+
 /frontend/.DS_Store
 /frontend/.env.local
 /frontend/.env.development.local

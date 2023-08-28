@@ -1,9 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, session, jsonify
 from flask_socketio import SocketIO
+from flask_session import Session
+from datetime import timedelta
 from hashlib import sha256
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "mysecretkey"
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=15)
+Session(app)
 
 socketio = SocketIO(app)
 
@@ -21,7 +26,7 @@ def create_room():
     if hashed_room in active_rooms:
         return jsonify({"message": "Room already exists."}), 400
 
-    active_rooms[hashed_room] = 1
+    active_rooms[hashed_room] = [session.sid]
     return jsonify({"message": "Room created successfully."}), 200
 
 @app.route("/join_room", methods=["POST"])
@@ -32,10 +37,13 @@ def join_room():
     if hashed_room not in active_rooms:
         return jsonify({"message": "Room does not exist."}), 400
 
-    if active_rooms[hashed_room] >= 2:
+    if session.sid in active_rooms[hashed_room]:
+        return jsonify({"message": "Joined room successfully."}), 200
+
+    if len(active_rooms[hashed_room]) >= 2:
         return jsonify({"message": "Room is full."}), 400
 
-    active_rooms[hashed_room] += 1
+    active_rooms[hashed_room].append(session.sid)
     return jsonify({"message": "Joined room successfully."}), 200
 
 @app.route("/leave_room", methods=["POST"])
@@ -46,8 +54,8 @@ def leave_room():
     if hashed_room not in active_rooms:
         return jsonify({"message": "Room does not exist."}), 400
 
-    if active_rooms[hashed_room] > 0:
-        active_rooms[hashed_room] -= 1
+    if session.sid in active_rooms[hashed_room]:
+        active_rooms[hashed_room].remove(session.sid)
         return jsonify({"message": "Left room successfully."}), 200
     else:
         return jsonify({"message": "You are not in this room."}), 400
