@@ -73,12 +73,15 @@ def join_room():
         active_sessions = active_rooms[hashed_room]
 
         if any(session_info[0] == session_id for session_info in active_sessions):
-            return jsonify({"message": "Joined room successfully."}), 200
+            return jsonify({"message": "Rejoined room successfully."}), 200
 
         if len(active_rooms[hashed_room]) >= 2:
             return jsonify({"message": "Room is full."}), 400
 
         active_sessions.append((session_id, datetime.now()))
+
+        if len(active_sessions) == 2:
+            return jsonify({"message": "Joined full room successfully."}), 200
 
     return jsonify({"message": "Joined room successfully."}), 200
 

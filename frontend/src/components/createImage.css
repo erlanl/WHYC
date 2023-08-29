@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1 {
+    font-size: 45px;
+}
+
+.createImg{
+    min-height: 30vh;
+    width: 409px;
+    height: 446px;
+    flex-shrink: 0;
+    border: 7px solid #522B5B;
+    scale: 0.9;
+}
+
+.inputLabel{
+    color: rgba(251, 228, 216, 0.50);
+    font-family: Suez One;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 10px;
+    border: 4px solid rgba(251, 228, 216, 0.80);
+    background: #522B5B;
+    padding-left: 15px;
+}
