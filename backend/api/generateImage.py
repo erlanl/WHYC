@@ -1,8 +1,12 @@
 from flask import Flask, make_response, jsonify, request
-from keyOpenAI import OPENAI_API_KEY, MODEL_GPT
 import openai
+import json
 
-openai.api_key = OPENAI_API_KEY
+MODEL_GPT = 'gpt-4'
+with open('backend/credentials.json', 'r') as f:
+    credentials = json.load(f)
+
+openai.api_key = credentials['openai_api_key']
 openai.Model.list()
 
 app = Flask(__name__)
