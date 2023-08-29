@@ -1,16 +1,27 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
+import { useTimer } from 'react-timer-hook';
 import './game.css';
 import astroImage from '../images/image.png';
 import Footer from './footer';
 import PopupResultado from './popupResultado';
 
 function GameWindow() {
+
+  axios.defaults.baseURL = 'http://localhost:5001/';
   const [open, setOpen] = useState(false);
   const [word, setWord] = useState('');
   const [words, setWords] = useState([]);
-  axios.defaults.baseURL = 'http://localhost:5001/';
+  const [counter, setCounter] = useState(0);
+
+  const { seconds, isRunning, start, pause, resume, restart } = useTimer({
+    expiryTimestamp: new Date().getTime() + 60000,
+    onExpire: () => {
+      setOpen(true)
+    },
+    autoStart: true,
+  });
 
   const closeModel = () => {
     setOpen(false);
@@ -35,13 +46,22 @@ function GameWindow() {
 
   const handleKeyPress = async (event) => {
     if (event.key === 'Enter' && word.trim() !== '') {
-      console.log("Passei aqui");
+
       let value = await evalWord()
+      if (value){
+        setCounter(counter + 1)
+      }
+      
       setWords([...words, [word, value]]);
       console.log(words);
       setWord('');
     }
   }
+
+  const formatTime = (time) => {
+    const seconds = (time % 60).toString().padStart(2, '0');
+    return `${seconds}`;
+  };
 
   return (
     
@@ -51,7 +71,7 @@ function GameWindow() {
         <div className='columns-2 w-full flex items-center justify-between'>
 
           <div className='pl-20'>
-          <TimeCount text={"30"}/>
+          <TimeCount text={formatTime(seconds)}/>
           </div>
 
           <div className='items-center content-center'>
@@ -59,7 +79,7 @@ function GameWindow() {
           </div>
 
           <div className='pr-20'>
-            <TimeCount text={"1/5"}/>
+            <TimeCount text={`${counter}/5`}/>
           </div>
         </div>
 
@@ -80,8 +100,7 @@ function GameWindow() {
         <HistoryGuess 
           words={words} 
         />
-
-        <button onClick={() => {setOpen(o => !o)}}> Teste </button> {/* Botao temporario para ver o popup dizendo o resultado da partida */} 
+        
         <Popup open={open} closeOnDocumentClick={false} modal>
           <PopupResultado venceu={true} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
         </Popup>
