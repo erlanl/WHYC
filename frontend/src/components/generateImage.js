@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './generateImage.css';
-
-import astroImage from '../images/image.png';
 
 function GenerateImagePage() {
     return (
@@ -24,27 +23,27 @@ function Header() {
 }
 
 function Main() {
+    const [keyWordInput, setKeyWordInput] = useState("");
+
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
             <div className='flex flex-col items-center content-center'>
                 <Image />
-                <GenerateButton />
+                <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} />
             </div>
             <div className='flex flex-col justify-end'>
-                <KeyWord numInput={1} />
-                <KeyWord numInput={2} />
-                <KeyWord numInput={3} />
-                <KeyWord numInput={4} />
-                <KeyWord numInput={5} />
+                <KeyWord numInput={1} input={keyWordInput} setKeyWord={setKeyWordInput} />
             </div>
         </main>
     );
 }
 
 function Image() {
+    let imageURL = "https://media.discordapp.net/attachments/1136100675391078410/1146048266761416776/image.png"
+
     return (
         <image className='pt-3'>
-            <img src={astroImage} alt='astro' className='generateImg'/>
+            <img src={imageURL} alt='dalleImg' className='generateImg'/>
         </image>
     );
 }
@@ -55,16 +54,43 @@ function KeyWord(props) {
             <num className='pr-3 text-2xl'>{props.numInput}.</num>
             <input type="text" name="inputKeyword" id="inputKeyword"
                 className="block rounded-md py-2 pr-20 sm:text-sm inputLabel"
-                placeholder="Input da palavra chave"
+                placeholder="keyWord"
+                value={props.input}
+                onChange={(e) => props.setKeyWord(e.target.value)}
             />
         </keyword>
     );
 }
 
-function GenerateButton() {
+function GenerateButton(props) {
+    let keyWordsList = [props.input]
+    //for (var ipt = 0; i <= props.numInput; ipt++) {
+    //    keyWordsList.push(props.inputList[ipt])
+    //}
+    
+    const generateImageClick = async () => {
+        try{
+            const res = await axios.post("http://localhost:5000/generate-image/test-post", {
+                "key_words": keyWordsList
+            });
+
+            if (res.status === 200) {
+                alert(JSON.stringify(res.data));
+                props.setKeyWord("")
+            }
+            else {
+                alert("ERROR: " + res.status);
+            }
+        }
+        catch (err) {
+            console.error(err);
+            alert(err);
+        }
+    }
+
     return(
         <generate>
-            <button className='button-home'>GERAR</button>
+            <button className='button-home' onClick={generateImageClick}>GERAR</button>
         </generate>
     );
 }
