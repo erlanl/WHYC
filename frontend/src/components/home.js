@@ -100,7 +100,7 @@ function PopUpInserirCodigo({setOpen, setSalaCheia}) {
         }
 
         const hashedRoom = SHA256(codigo).toString();
-        navigate(`/create-image/${hashedRoom}`);
+        navigate(`/generate-image/${hashedRoom}`);
       }
     } catch (err) {
       console.error(err);

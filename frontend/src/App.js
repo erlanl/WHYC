@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/home';
 import GamePage from './components/game';
 import RoomPage from './components/room';
-import CreateImagePage from './components/createImage'
+import GenerateImagePage from './components/generateImage'
 import './components/home.css'
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
         <Route path='/' exact element={<HomePage/>} />
         <Route path='/game/:room' element={<GamePage/>} />
         <Route path='/room' element={<RoomPage/>} />
-        <Route path='/create-image/:room' element={<CreateImagePage/>} />
+        <Route path='/generate-image/:room' element={<GenerateImagePage/>} />
       </Routes>
     </Router>
   );

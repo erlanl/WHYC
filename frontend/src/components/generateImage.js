@@ -1,9 +1,9 @@
 import React from 'react';
-import './createImage.css';
+import './generateImage.css';
 
 import astroImage from '../images/image.png';
 
-function CreateImagePage() {
+function GenerateImagePage() {
     return (
         <body className="custom-font min-h-screen bg-custom-color flex flex-col">
             <Header />
@@ -13,7 +13,7 @@ function CreateImagePage() {
     );
 }
 
-export default CreateImagePage;
+export default GenerateImagePage;
 
 function Header() {
     return (
@@ -44,7 +44,7 @@ function Main() {
 function Image() {
     return (
         <image className='pt-3'>
-            <img src={astroImage} alt='astro' className='createImg'/>
+            <img src={astroImage} alt='astro' className='generateImg'/>
         </image>
     );
 }
