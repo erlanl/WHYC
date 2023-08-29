@@ -34,7 +34,7 @@ function Main() {
   const [salaCheia, setSalaCheia] = useState(false);
   const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
-
+  axios.defaults.baseURL = 'http://localhost:5001/';
 /*
   useEffect(() => {
     alert("Entrou no 'useEffect'");
@@ -100,7 +100,7 @@ function PopUpInserirCodigo({setOpen, setSalaCheia}) {
         }
 
         const hashedRoom = SHA256(codigo).toString();
-        navigate(`/game/${hashedRoom}`);
+        navigate(`/create-image/${hashedRoom}`);
       }
     } catch (err) {
       console.error(err);

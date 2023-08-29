@@ -13,7 +13,7 @@ function App() {
         <Route path='/' exact element={<HomePage/>} />
         <Route path='/game/:room' element={<GamePage/>} />
         <Route path='/room' element={<RoomPage/>} />
-        <Route path='/create-image' element={<CreateImagePage/>} />
+        <Route path='/create-image/:room' element={<CreateImagePage/>} />
       </Routes>
     </Router>
   );

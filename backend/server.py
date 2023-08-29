@@ -1,6 +1,7 @@
 from flask import Flask, request, session, jsonify
 from flask_socketio import SocketIO
 from flask_session import Session
+from flask_cors import CORS
 from datetime import datetime, timedelta
 from threading import Thread, Lock, Event
 from hashlib import sha256
@@ -11,6 +12,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=60)
 Session(app)
 
+CORS(app)
 socketio = SocketIO(app)
 
 active_rooms = {}
