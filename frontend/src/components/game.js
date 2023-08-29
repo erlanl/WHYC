@@ -1,23 +1,47 @@
 import React, {useState} from 'react';
 import Popup from 'reactjs-popup';
+import axios from 'axios';
 import './game.css';
 import astroImage from '../images/image.png';
 import Footer from './footer';
 import PopupResultado from './popupResultado';
 
-var words = {
-  'homem': true,
-  'brasil' : false,
-  'astronauta' : true,
-  'terra': false
-}
-
 function GameWindow() {
   const [open, setOpen] = useState(false);
+  const [word, setWord] = useState('');
+  const [words, setWords] = useState([]);
+  axios.defaults.baseURL = 'http://localhost:5001/';
 
   const closeModel = () => {
     setOpen(false);
   };
+
+  const evalWord = async () => {
+    try{
+      const res = await axios.post("/get_answer", {
+        "word": word,
+      });
+      
+      if (res.status === 200) {
+        return res.data.correct
+      }
+    } 
+
+    catch (err) {
+      console.error(err);
+      alert("Erro ao avaliar a palavra");
+    }
+  }
+
+  const handleKeyPress = async (event) => {
+    if (event.key === 'Enter' && word.trim() !== '') {
+      console.log("Passei aqui");
+      let value = await evalWord()
+      setWords([...words, [word, value]]);
+      console.log(words);
+      setWord('');
+    }
+  }
 
   return (
     
@@ -27,7 +51,7 @@ function GameWindow() {
         <div className='columns-2 w-full flex items-center justify-between'>
 
           <div className='pl-20'>
-            <div className='timer rounded-full'><p className='timerText'>30</p></div>
+          <TimeCount text={"30"}/>
           </div>
 
           <div className='items-center content-center'>
@@ -35,27 +59,33 @@ function GameWindow() {
           </div>
 
           <div className='pr-20'>
-            <div className='timer rounded-full'><p className='timerText'>1/5</p></div>
+            <TimeCount text={"1/5"}/>
           </div>
         </div>
 
         <div className='pt-8'>
-          <img src={astroImage} alt='astro' className='genImg'/>
+          <ShowImage/>
         </div>
         
       </header>
-      <div className="divMain">
-        <InputGuess/>
-        <HistoryGuess/>
 
-        {/* Botao temporario para ver o popup dizendo o resultado da partida */}
-        <button onClick={() => {setOpen(o => !o)}}>
-          Teste
-        </button>
+      <div className="divMain">
+
+        <InputGuess
+          handleKeyPress={handleKeyPress}
+          onChange={(e) => setWord(e.target.value)}
+          value={word}
+        />
+
+        <HistoryGuess 
+          words={words} 
+        />
+
+        <button onClick={() => {setOpen(o => !o)}}> Teste </button> {/* Botao temporario para ver o popup dizendo o resultado da partida */} 
         <Popup open={open} closeOnDocumentClick={false} modal>
-          {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
-          <PopupResultado venceu={true} />
+          <PopupResultado venceu={true} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
         </Popup>
+
       </div>
 
       <Footer/>
@@ -63,32 +93,49 @@ function GameWindow() {
   );
 }
 
-function InputGuess() {
+function InputGuess({ handleKeyPress, onChange, value }) {
   return (
     <div className="inputWord pt-10">
-        <input
-          type="text"
-          name="inputGuess"
-          id="inputGuess"
-          className="block w-full rounded-md py-1.5 pr-20 sm:text-sm sm:leading-6 inputLabel"
-          placeholder="Digite uma palavra"
-        />
+      <input
+        type="text"
+        name="inputGuess"
+        id="inputGuess"
+        value={value}
+        onChange={onChange}
+        onKeyPress={handleKeyPress}
+        className="block w-full rounded-md py-1.5 pr-20 sm:text-sm sm:leading-6 inputLabel"
+        placeholder="Digite uma palavra"
+      />
     </div>
-  )
+  );
 }
 
-function HistoryGuess() {
+function ShowImage() {
+  return(
+    <img src={astroImage} alt='astro' className='genImg'/>
+  );
+}
+
+function HistoryGuess({ words }) {
   return (
     <div className='pt-20'>
-      {Object.entries(words).map(([word, isTrue]) => (
-        <div className='pt-2'>
-        <div key={word} className={`rectangle ${isTrue ? 'colorRight' : 'colorWrong'} `}>
-          <p className={`text-center text-guess ${isTrue ? "text-accept" : "text-wrong"}`}>{word}</p>
-        </div>
+      {words.map((word, index) => (
+        <div className='pt-2' key={index}>
+          <div className={`rectangle ${word[1] ? 'colorRight' : 'colorWrong'}`}>
+            <p className={`text-center text-guess ${word[1] ? "text-accept" : "text-wrong"}`}>
+              {word[0]}
+            </p>
+          </div>
         </div>
       ))}
     </div>
   )
+}
+
+function TimeCount({text}){
+  return(
+    <div className='timer rounded-full'><p className='timerText'>{text}</p></div>
+  );
 }
 
 export default GameWindow;

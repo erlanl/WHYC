@@ -110,6 +110,21 @@ def leave_room():
 def get_active_rooms():
     return jsonify(active_rooms), 200
 
+@app.route("/get_answer", methods=["POST"])
+def get_answer():
+    data = request.json
+    word = data["word"]
+    listWords = ["homem", "lua", "espaco", "astronauta", "terra"]
+
+    exist = word in listWords
+
+    if exist:
+        return jsonify({"correct": True}), 200
+    elif exist == False:
+        return jsonify({"correct": False}), 200
+
+    return jsonify({"message": "We cannot validate the word"}), 400
+
 if __name__ == "__main__":
     cleanup_thread = Thread(target=session_cleanup)
     cleanup_thread.start()
