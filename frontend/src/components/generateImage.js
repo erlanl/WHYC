@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateImage.css';
+import { Link } from 'react-router-dom';
 
 function GenerateImagePage() {
     return (
@@ -8,10 +9,12 @@ function GenerateImagePage() {
             <Header />
             <Main />
             <Footer />
+            <ChangePage/>
         </body>
     );
 }
 export default GenerateImagePage;
+
 
 function Header() {
     return (
@@ -51,7 +54,7 @@ function Image(props) {
 function KeyWord(props) {
     return (
         <keyword className='flex flex-line pb-3 justify-end items-center'>
-            <num className='pr-3 text-2xl'>{props.numInput}.</num>
+            <num className='pr-3 text-2xl text-font-bege'>{props.numInput}.</num>
             <input type="text" name="inputKeyword" id="inputKeyword"
                 className="block rounded-md py-2 pr-20 sm:text-sm inputLabel"
                 placeholder="Insira a palavra chave aqui"
@@ -69,6 +72,29 @@ function KeyWord(props) {
     );
 }
 
+function ChangePage(props) {   
+
+    // Obtém o caminho da URL
+    const path = window.location.pathname;
+
+    // Divide o caminho da URL em partes usando '/'
+    const pathParts = path.split('/');
+
+    // Encontra o índice da parte que segue "/generate-image/"
+    const indexOfGenerateImage = pathParts.indexOf('generate-image');
+    const hashedRoom = pathParts[indexOfGenerateImage + 1];
+    console.log(hashedRoom);
+
+    return(
+        <generate> 
+
+            <Link to={`/game/${hashedRoom}`}>
+                <button className='button-home'>Próximo</button>  
+            </Link>
+        </generate>
+    );
+}
+
 function GenerateButton(props) {   
     const generateImageClick = async () => {
         if (props.input.includes("")) {
@@ -76,7 +102,7 @@ function GenerateButton(props) {
         }
         else {
             try{
-                const res = await axios.post("http://localhost:5000/generate-image", {
+                const res = await axios.post("http://localhost:5001/generate-image", {
                     "key_words": props.input
                 });
 
@@ -84,6 +110,7 @@ function GenerateButton(props) {
                     //alert("Imagem gerada")
                     const dalleURL = JSON.stringify(res.data.url).slice(1, -1);
                     props.setURL(dalleURL);
+                    sessionStorage.setItem("urlImage", dalleURL);
                     //alert(dalleURL);
                     props.setKeyWord(["", "", ""]);
                 }

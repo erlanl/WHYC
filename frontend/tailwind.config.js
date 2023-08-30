@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       colors: {
       'accept': '#B2DFC4',
-      'wrong': '#E25555'
+      'wrong': '#E25555',
+      'font-bege': '#fbe4d8',
       },
     },
   },

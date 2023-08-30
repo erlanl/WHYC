@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path='/' exact element={<HomePage/>} />
         <Route path='/game/:room' element={<GamePage/>} />
-        <Route path='/game' element={<GamePage/>} />
+        {/*<Route path='/game' element={<GamePage/>} /> */}
         <Route path='/room' element={<RoomPage/>} />
         <Route path='/generate-image/:room' element={<GenerateImagePage/>} />
       </Routes>
