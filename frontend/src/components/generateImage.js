@@ -72,27 +72,32 @@ function KeyWord(props) {
     );
 }
 
-function GenerateButton(props) {
-    let keyWordsList = props.input;
-    
+function GenerateButton(props) {   
     const generateImageClick = async () => {
-        try{
-            const res = await axios.post("http://localhost:5000/generate-image/test-post", {
-                "key_words": keyWordsList
-            });
+        if (props.input.includes("")) {
+            alert("Todos as palavras chaves precisam ser definidas")
+        }
+        else {
+            try{
+                const res = await axios.post("http://localhost:5000/generate-image/test-post", {
+                    "key_words": props.input
+                });
 
-            if (res.status === 200) {
-                alert(JSON.stringify(res.data));
-                props.setKeyWord(["", "", "", "", " "]);
+                if (res.status === 200) {
+                    alert(JSON.stringify(res.data));
+                    props.setKeyWord(["", "", "", "", " "]);
+                }
+                else {
+                    alert("ERROR: " + res.status);
+                }
             }
-            else {
-                alert("ERROR: " + res.status);
+            catch (err) {
+                console.error(err);
+                alert(err);
             }
         }
-        catch (err) {
-            console.error(err);
-            alert(err);
-        }
+
+        
     }
 
     return(
