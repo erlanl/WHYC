@@ -17,7 +17,7 @@ function GameWindow() {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    if (counter == 5) {
+    if (counter == 3) {
       setOpen(true);
       setWin(true);
       pause();
@@ -115,8 +115,8 @@ function GameWindow() {
         </Popup>
 
       </div>
-
-      <Footer/>
+      <div className='mt-auto'> <Footer/> </div>
+      
     </div>
   );
 }

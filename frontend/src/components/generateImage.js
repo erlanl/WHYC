@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateImage.css';
 import { Link } from 'react-router-dom';
+import astroImage from '../images/image.png';
 
 function GenerateImagePage() {
     return (
@@ -9,7 +10,7 @@ function GenerateImagePage() {
             <Header />
             <Main />
             <Footer />
-            <ChangePage/>
+            
         </body>
     );
 }
@@ -26,13 +27,16 @@ function Header() {
 
 function Main() {
     const [keyWordInput, setKeyWordInput] = useState(["", "", ""]);
-    const [imageURL, setImageURL] = useState("https://media.discordapp.net/attachments/1136100675391078410/1146048266761416776/image.png")
+    const [imageURL, setImageURL] = useState(astroImage)
 
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
             <div className='flex flex-col items-center content-center'>
                 <Image url={imageURL}/>
+                <div>
                 <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
+                <ChangePage/>
+                </div>
             </div>
             <div className='flex flex-col justify-end'>
                 <KeyWord numInput={1} input={keyWordInput} setKeyWord={setKeyWordInput} />
