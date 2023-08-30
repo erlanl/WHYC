@@ -2,6 +2,7 @@ from flask import Flask, make_response, jsonify, request
 from flask_cors import CORS
 import openai
 import json
+import requests
 
 MODEL_GPT = 'gpt-4'
 with open('backend/credentials.json', 'r') as f:
@@ -20,7 +21,8 @@ def generate_image():
     key_words = request.json
 
     dalle_prompt = gpt_call(key_words["key_words"])
-    image_url = dalle_call(dalle_prompt)
+    image_url = dalle_call(dalle_prompt)   #DALLE
+    #image_url = stable_diffusion_call(dalle_prompt, credentials) #STABLE DIFFUSION
 
     return make_response(
         jsonify(message='IMAGE URL:', url=image_url)
@@ -57,6 +59,20 @@ def dalle_call(dalle_prompt):
 
     return image_url
 
+def stable_diffusion_call(stable_diffusion_prompt, credentials):
+    url = "https://stablediffusionapi.com/api/v3/text2img"
+    data = {
+      'prompt': stable_diffusion_prompt,
+      'key': credentials['stable_diffusion_api_key'],
+      'width': 1024,
+      'height': 1024,
+      'samples': 1,
+      'safety_checker': "yes",
+      'self_attention': "yes"
+    }
+    image_url = requests.post(url, data=data).json()['output']
+
+    return image_url[0]
 
 @app.route('/generate-image/test-post', methods=['POST'])
 def post_test():
