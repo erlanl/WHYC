@@ -23,12 +23,13 @@ function Header() {
 
 function Main() {
     const [keyWordInput, setKeyWordInput] = useState(["", "", "", "", ""]);
+    const [imageURL, setImageURL] = useState("https://media.discordapp.net/attachments/1136100675391078410/1146048266761416776/image.png")
 
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
             <div className='flex flex-col items-center content-center'>
-                <Image />
-                <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} />
+                <Image url={imageURL}/>
+                <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
             </div>
             <div className='flex flex-col justify-end'>
                 <KeyWord numInput={1} input={keyWordInput} setKeyWord={setKeyWordInput} />
@@ -41,12 +42,10 @@ function Main() {
     );
 }
 
-function Image() {
-    let imageURL = "https://media.discordapp.net/attachments/1136100675391078410/1146048266761416776/image.png"
-
+function Image(props) {
     return (
         <image className='pt-3'>
-            <img src={imageURL} alt='dalleImg' className='generateImg'/>
+            <img src={props.url} alt='dalleImg' className='generateImg'/>
         </image>
     );
 }
@@ -75,16 +74,19 @@ function KeyWord(props) {
 function GenerateButton(props) {   
     const generateImageClick = async () => {
         if (props.input.includes("")) {
-            alert("Todos as palavras chaves precisam ser definidas")
+            alert("Todos as palavras chaves precisam ser definidas");
         }
         else {
             try{
-                const res = await axios.post("http://localhost:5000/generate-image/test-post", {
+                const res = await axios.post("http://localhost:5000/generate-image", {
                     "key_words": props.input
                 });
 
                 if (res.status === 200) {
-                    alert(JSON.stringify(res.data));
+                    //alert("Imagem gerada")
+                    const dalleURL = JSON.stringify(res.data.url).slice(1, -1);
+                    props.setURL(dalleURL);
+                    //alert(dalleURL);
                     props.setKeyWord(["", "", "", "", " "]);
                 }
                 else {
@@ -96,8 +98,6 @@ function GenerateButton(props) {
                 alert(err);
             }
         }
-
-        
     }
 
     return(

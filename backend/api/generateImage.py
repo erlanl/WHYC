@@ -23,7 +23,7 @@ def generate_image():
     image_url = dalle_call(dalle_prompt)
 
     return make_response(
-        jsonify(message='IMAGE URL:', data=image_url)
+        jsonify(message='IMAGE URL:', url=image_url)
     )
 
 def gpt_call(key_words):
@@ -41,6 +41,7 @@ def gpt_call(key_words):
         temperature = 1,
     )
     dalle_prompt = gpt_response['choices'][0]['message']['content']
+    dalle_prompt = dalle_prompt[1:-1]
     print(f"DALLE PROMPT -> {dalle_prompt}")
     
     return dalle_prompt
