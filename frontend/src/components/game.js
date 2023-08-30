@@ -11,21 +11,27 @@ function GameWindow() {
 
   axios.defaults.baseURL = 'http://localhost:5001/';
   const [open, setOpen] = useState(false);
+  const [win, setWin] = useState(false);
   const [word, setWord] = useState('');
   const [words, setWords] = useState([]);
   const [counter, setCounter] = useState(0);
 
+  useEffect(() => {
+    if (counter == 5) {
+      setOpen(true);
+      setWin(true);
+      pause();
+    }
+  }, [words]);
+
   const { seconds, isRunning, start, pause, resume, restart } = useTimer({
     expiryTimestamp: new Date().getTime() + 60000,
     onExpire: () => {
-      setOpen(true)
+      setOpen(true);
+      setWin(false);
     },
     autoStart: true,
   });
-
-  const closeModel = () => {
-    setOpen(false);
-  };
 
   const evalWord = async () => {
     try{
@@ -42,19 +48,22 @@ function GameWindow() {
       console.error(err);
       alert("Erro ao avaliar a palavra");
     }
-  }
+  };
 
   const handleKeyPress = async (event) => {
     if (event.key === 'Enter' && word.trim() !== '') {
 
-      let value = await evalWord()
+      let value = await evalWord();
+
       if (value){
-        setCounter(counter + 1)
+        setCounter(counter + 1);
       }
       
       setWords([...words, [word, value]]);
       console.log(words);
       setWord('');
+
+      console.log(counter);
     }
   }
 
@@ -102,7 +111,7 @@ function GameWindow() {
         />
         
         <Popup open={open} closeOnDocumentClick={false} modal>
-          <PopupResultado venceu={true} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
+          <PopupResultado venceu={win} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
         </Popup>
 
       </div>
