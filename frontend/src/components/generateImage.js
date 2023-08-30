@@ -11,7 +11,6 @@ function GenerateImagePage() {
         </body>
     );
 }
-
 export default GenerateImagePage;
 
 function Header() {
@@ -23,7 +22,7 @@ function Header() {
 }
 
 function Main() {
-    const [keyWordInput, setKeyWordInput] = useState("");
+    const [keyWordInput, setKeyWordInput] = useState(["", "", "", "", ""]);
 
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
@@ -33,6 +32,10 @@ function Main() {
             </div>
             <div className='flex flex-col justify-end'>
                 <KeyWord numInput={1} input={keyWordInput} setKeyWord={setKeyWordInput} />
+                <KeyWord numInput={2} input={keyWordInput} setKeyWord={setKeyWordInput} />
+                <KeyWord numInput={3} input={keyWordInput} setKeyWord={setKeyWordInput} />
+                <KeyWord numInput={4} input={keyWordInput} setKeyWord={setKeyWordInput} />
+                <KeyWord numInput={5} input={keyWordInput} setKeyWord={setKeyWordInput} />
             </div>
         </main>
     );
@@ -54,19 +57,23 @@ function KeyWord(props) {
             <num className='pr-3 text-2xl'>{props.numInput}.</num>
             <input type="text" name="inputKeyword" id="inputKeyword"
                 className="block rounded-md py-2 pr-20 sm:text-sm inputLabel"
-                placeholder="keyWord"
-                value={props.input}
-                onChange={(e) => props.setKeyWord(e.target.value)}
+                placeholder="Insira a palavra chave aqui"
+                value={props.input[props.numInput-1]}
+                onChange={(e) => props.setKeyWord(
+                    props.input.map((inputKeyWord, index) => {
+                        if (index === props.numInput-1) {
+                            return e.target.value;
+                        }
+                        return inputKeyWord;
+                    })
+                )}
             />
         </keyword>
     );
 }
 
 function GenerateButton(props) {
-    let keyWordsList = [props.input]
-    //for (var ipt = 0; i <= props.numInput; ipt++) {
-    //    keyWordsList.push(props.inputList[ipt])
-    //}
+    let keyWordsList = props.input;
     
     const generateImageClick = async () => {
         try{
@@ -76,7 +83,7 @@ function GenerateButton(props) {
 
             if (res.status === 200) {
                 alert(JSON.stringify(res.data));
-                props.setKeyWord("")
+                props.setKeyWord(["", "", "", "", " "]);
             }
             else {
                 alert("ERROR: " + res.status);
