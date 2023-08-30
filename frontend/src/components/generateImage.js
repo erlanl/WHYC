@@ -22,7 +22,7 @@ function Header() {
 }
 
 function Main() {
-    const [keyWordInput, setKeyWordInput] = useState(["", "", "", "", ""]);
+    const [keyWordInput, setKeyWordInput] = useState(["", "", ""]);
     const [imageURL, setImageURL] = useState("https://media.discordapp.net/attachments/1136100675391078410/1146048266761416776/image.png")
 
     return (
@@ -35,8 +35,6 @@ function Main() {
                 <KeyWord numInput={1} input={keyWordInput} setKeyWord={setKeyWordInput} />
                 <KeyWord numInput={2} input={keyWordInput} setKeyWord={setKeyWordInput} />
                 <KeyWord numInput={3} input={keyWordInput} setKeyWord={setKeyWordInput} />
-                <KeyWord numInput={4} input={keyWordInput} setKeyWord={setKeyWordInput} />
-                <KeyWord numInput={5} input={keyWordInput} setKeyWord={setKeyWordInput} />
             </div>
         </main>
     );
@@ -87,7 +85,7 @@ function GenerateButton(props) {
                     const dalleURL = JSON.stringify(res.data.url).slice(1, -1);
                     props.setURL(dalleURL);
                     //alert(dalleURL);
-                    props.setKeyWord(["", "", "", "", " "]);
+                    props.setKeyWord(["", "", ""]);
                 }
                 else {
                     alert("ERROR: " + res.status);
