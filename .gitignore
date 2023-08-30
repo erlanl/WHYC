@@ -31,3 +31,6 @@
 /.vscode
 /backend/.vscode
 /frontend/.vscode
+
+#Credentials
+/backend/credentials.json
