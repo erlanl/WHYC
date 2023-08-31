@@ -32,5 +32,8 @@
 /backend/.vscode
 /frontend/.vscode
 
+*/__pycache__
+*/api/__pycache__
+*/api/controllers/__pycache__
 #Credentials
 /backend/credentials.json
