@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateImage.css';
+import { Link } from 'react-router-dom';
+import astroImage from '../images/image.png';
 
 function GenerateImagePage() {
     return (
@@ -8,10 +10,12 @@ function GenerateImagePage() {
             <Header />
             <Main />
             <Footer />
+            
         </body>
     );
 }
 export default GenerateImagePage;
+
 
 function Header() {
     return (
@@ -23,13 +27,16 @@ function Header() {
 
 function Main() {
     const [keyWordInput, setKeyWordInput] = useState(["", "", ""]);
-    const [imageURL, setImageURL] = useState("https://media.discordapp.net/attachments/1136100675391078410/1146048266761416776/image.png")
+    const [imageURL, setImageURL] = useState(astroImage)
 
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
             <div className='flex flex-col items-center content-center'>
                 <Image url={imageURL}/>
+                <div>
                 <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
+                <ChangePage/>
+                </div>
             </div>
             <div className='flex flex-col justify-end'>
                 <KeyWord numInput={1} input={keyWordInput} setKeyWord={setKeyWordInput} />
@@ -51,7 +58,7 @@ function Image(props) {
 function KeyWord(props) {
     return (
         <keyword className='flex flex-line pb-3 justify-end items-center'>
-            <num className='pr-3 text-2xl'>{props.numInput}.</num>
+            <num className='pr-3 text-2xl text-font-bege'>{props.numInput}.</num>
             <input type="text" name="inputKeyword" id="inputKeyword"
                 className="block rounded-md py-2 pr-20 sm:text-sm inputLabel"
                 placeholder="Insira a palavra chave aqui"
@@ -66,6 +73,29 @@ function KeyWord(props) {
                 )}
             />
         </keyword>
+    );
+}
+
+function ChangePage(props) {   
+
+    // Obtém o caminho da URL
+    const path = window.location.pathname;
+
+    // Divide o caminho da URL em partes usando '/'
+    const pathParts = path.split('/');
+
+    // Encontra o índice da parte que segue "/generate-image/"
+    const indexOfGenerateImage = pathParts.indexOf('generate-image');
+    const hashedRoom = pathParts[indexOfGenerateImage + 1];
+    console.log(hashedRoom);
+
+    return(
+        <generate> 
+
+            <Link to={`/game/${hashedRoom}`}>
+                <button className='button-home'>Próximo</button>  
+            </Link>
+        </generate>
     );
 }
 
@@ -84,6 +114,7 @@ function GenerateButton(props) {
                     //alert("Imagem gerada")
                     const dalleURL = JSON.stringify(res.data.url).slice(1, -1);
                     props.setURL(dalleURL);
+                    sessionStorage.setItem("urlImage", dalleURL);
                     //alert(dalleURL);
                     props.setKeyWord(["", "", ""]);
                 }

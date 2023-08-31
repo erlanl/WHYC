@@ -7,7 +7,7 @@
 /frontend/.pnp.js
 
 #API keys
-/backend/api/controllers/credentials.json
+/backend/credentials.json
 
 # testing
 /frontend/coverage
@@ -17,6 +17,7 @@
 
 # misc
 /backend/flask_session
+
 
 /frontend/.DS_Store
 /frontend/.env.local

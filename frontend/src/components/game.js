@@ -17,7 +17,7 @@ function GameWindow() {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    if (counter == 5) {
+    if (counter == 3) {
       setOpen(true);
       setWin(true);
       pause();
@@ -88,7 +88,7 @@ function GameWindow() {
           </div>
 
           <div className='pr-20'>
-            <TimeCount text={`${counter}/5`}/>
+            <TimeCount text={`${counter}/3`}/>
           </div>
         </div>
 
@@ -115,8 +115,8 @@ function GameWindow() {
         </Popup>
 
       </div>
-
-      <Footer/>
+      <div className='mt-auto'> <Footer/> </div>
+      
     </div>
   );
 }
@@ -139,8 +139,10 @@ function InputGuess({ handleKeyPress, onChange, value }) {
 }
 
 function ShowImage() {
+  let url = sessionStorage.getItem("urlImage")
+  console.log(url)
   return(
-    <img src={astroImage} alt='astro' className='genImg'/>
+    <img src={url} alt='astro' className='genImg'/>
   );
 }
 
