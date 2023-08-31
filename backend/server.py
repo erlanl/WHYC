@@ -7,6 +7,7 @@ from threading import Thread, Lock, Event
 from hashlib import sha256
 import openai
 import json
+import requests
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "mysecretkey"
@@ -140,18 +141,18 @@ def generate_image():
     key_words = request.json
 
     dalle_prompt = gpt_call(key_words["key_words"])
-    image_url = dalle_call(dalle_prompt)
-
+    #image_url = dalle_call(dalle_prompt)
+    image_url = stable_diffusion_call(dalle_prompt, credentials)
     return make_response(
         jsonify(message='IMAGE URL:', url=image_url)
     )
 
 def gpt_call(key_words):
-    gpt_prompt = "Crie um DALLE prompt em inglês utilizando as seguintes palavras:"
+    gpt_prompt = "crie uma Dall-e prompt em ingles com  as seguintes palavras:"
     for i in key_words:
         gpt_prompt = gpt_prompt + " " + i
     print(f"GPT PROMPT -> {gpt_prompt}")
-    
+
     gpt_response = openai.ChatCompletion.create(
         model = MODEL_GPT,
         messages = [
@@ -163,8 +164,8 @@ def gpt_call(key_words):
     dalle_prompt = gpt_response['choices'][0]['message']['content']
     dalle_prompt = dalle_prompt[1:-1]
     print(f"DALLE PROMPT -> {dalle_prompt}")
-    
-    return dalle_prompt
+ 
+    return gpt_prompt
 
 def dalle_call(dalle_prompt):
     dalle_response = openai.Image.create(
@@ -176,6 +177,21 @@ def dalle_call(dalle_prompt):
     print(f"IMAGE URL -> {image_url}")
 
     return image_url
+
+def stable_diffusion_call(stable_diffusion_prompt, credentials):
+    url = "https://stablediffusionapi.com/api/v3/text2img"
+    data = {
+      'prompt': stable_diffusion_prompt,
+      'key': credentials['stable_diffusion_api_key'],
+      'width': 1024,
+      'height': 1024,
+      'samples': 1,
+      'safety_checker': "yes",
+      'self_attention': "yes"
+    }
+    image_url = requests.post(url, data=data).json()['output']
+    print(image_url)
+    return image_url[0]
 
 
 @app.route('/generate-image/test-post', methods=['POST'])
