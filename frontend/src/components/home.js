@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { SHA256 } from 'crypto-js';
@@ -31,20 +31,9 @@ function Header() {
 function Main() {
   const [open, setOpen] = useState(false);
   const [openGCod, setOpenGCod] = useState(false);
-  const [salaCheia, setSalaCheia] = useState(false);
   const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
   axios.defaults.baseURL = 'http://localhost:5001/';
-/*
-  useEffect(() => {
-    alert("Entrou no 'useEffect'");
-    alert(salaCheia);
-    if (salaCheia) {
-      const hashedRoom = SHA256(codigo).toString();
-      navigate(`/game/${hashedRoom}`);
-    }
-  }, [salaCheia, codigo, navigate]);
-*/
 
   const criarSala = async () => {
     try {
@@ -56,9 +45,23 @@ function Main() {
       });
 
       if (res.status === 200) {
-        setSalaCheia(false);
         setOpenGCod(true);
-      }
+
+        const hashedRoom = SHA256(codigo).toString();
+        try{
+          const res2 = await axios.post("/room_full", {
+          room: codigoGerado,
+        });
+
+        if (res2.status === 200 && res2.data.is_full) {
+          navigate(`/generate-image/${hashedRoom}`);
+        }
+
+        } catch (err) {
+          console.error(err);
+          alert("Erro mudar de sala.");
+        }
+    }
     } catch (err) {
       console.error(err);
       alert("Erro ao criar sala.");
@@ -69,7 +72,7 @@ function Main() {
     <main className="custom-font flex flex-col items-center my-14">
       <button className='button-home' onClick={() => {setOpen(o => !o)}}>JOGAR</button>
       <Popup open={open} closeOnDocumentClick={false} modal>
-        <PopUpInserirCodigo setOpen={setOpen} setSalaCheia={setSalaCheia}/>
+        <PopUpInserirCodigo setOpen={setOpen}/>
       </Popup>
       <button className='button-home' onClick={criarSala}>CRIAR SALA</button>
       <Popup open={openGCod} modal>
@@ -79,7 +82,7 @@ function Main() {
   );
 }
 
-function PopUpInserirCodigo({setOpen, setSalaCheia}) {
+function PopUpInserirCodigo({setOpen}) {
   const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
 
@@ -95,10 +98,7 @@ function PopUpInserirCodigo({setOpen, setSalaCheia}) {
       });
 
       if (res.status === 200) {
-        if (res.data.message === "Joined full room successfully.") {
-          setSalaCheia(true);
-        }
-
+        
         const hashedRoom = SHA256(codigo).toString();
         navigate(`/generate-image/${hashedRoom}`);
       }

@@ -1,5 +1,5 @@
 from flask import request, session, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
 from hashlib import sha256
 
 def compute_hashed_room(room):
@@ -76,3 +76,14 @@ def get_answer():
         return jsonify({"correct": False}), 200
 
     return jsonify({"message": "We cannot validate the word"}), 400
+
+def is_room_full(active_rooms):
+    data = request.json
+    hashed_room = compute_hashed_room(data["room"])
+
+    start = datetime.now()
+    while datetime.now() - start <= timedelta(seconds=30):
+       if len(active_rooms[hashed_room]) == 2:
+        return jsonify({"is_full": True}), 200
+
+    return jsonify({"is_full": False}), 200

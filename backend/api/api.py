@@ -14,7 +14,7 @@ def create_room_post():
 @app.route("/join_room", methods=["POST"])
 def join_room_post():
     return join_room(active_rooms_lock, active_rooms)
-
+ 
 @app.route("/leave_room", methods=["POST"])
 def leave_room_post():
     return leave_room(active_rooms_lock, active_rooms)
@@ -30,3 +30,7 @@ def get_answer_post():
 @app.route('/generate-image', methods=['POST'])
 def generate_image_post():
     return generate_image()
+
+@app.route('/room_full', methods=['POST'])
+def is_room_full_post():
+    return is_room_full(active_rooms)
