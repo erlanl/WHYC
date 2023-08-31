@@ -76,7 +76,7 @@ function GenerateButton(props) {
         }
         else {
             try{
-                const res = await axios.post("http://localhost:5000/generate-image", {
+                const res = await axios.post("http://localhost:5001/generate-image", {
                     "key_words": props.input
                 });
 

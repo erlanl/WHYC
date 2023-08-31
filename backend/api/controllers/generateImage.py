@@ -1,5 +1,4 @@
-from flask import Flask, make_response, jsonify, request
-from flask_cors import CORS
+from flask import make_response, jsonify, request
 import openai
 import json
 import requests
@@ -11,12 +10,6 @@ with open('backend/credentials.json', 'r') as f:
 openai.api_key = credentials['openai_api_key']
 openai.Model.list()
 
-app = Flask(__name__)
-app.json.sort_keys = False
-CORS(app)
-
-
-@app.route('/generate-image', methods=['POST'])
 def generate_image():
     key_words = request.json
 
@@ -73,15 +66,3 @@ def stable_diffusion_call(stable_diffusion_prompt, credentials):
     image_url = requests.post(url, data=data).json()['output']
 
     return image_url[0]
-
-@app.route('/generate-image/test-post', methods=['POST'])
-def post_test():
-    key_words = request.json
-
-    return make_response(
-        jsonify(message='LISTA DE KEYWORDS:', data=key_words)
-    )
-
-
-if __name__ == "__main__":
-    app.run()
