@@ -3,8 +3,11 @@ from flask_socketio import SocketIO
 from flask_session import Session
 from flask_cors import CORS
 from datetime import timedelta
+import redis
 
 app = Flask(__name__)
+
+
 app.config["SECRET_KEY"] = "mysecretkey"
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=60)

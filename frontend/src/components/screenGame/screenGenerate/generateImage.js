@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateImage.css';
 import { Link } from 'react-router-dom';
-import astroImage from '../images/image.png';
+import astroImage from '../../../images/image.png';
 
 function GenerateImagePage() {
     return (
@@ -34,8 +34,8 @@ function Main() {
             <div className='flex flex-col items-center content-center'>
                 <Image url={imageURL}/>
                 <div>
-                <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
-                <ChangePage/>
+                    <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
+                    <ChangePage/>
                 </div>
             </div>
             <div className='flex flex-col justify-end'>
@@ -43,6 +43,7 @@ function Main() {
                 <KeyWord numInput={2} input={keyWordInput} setKeyWord={setKeyWordInput} />
                 <KeyWord numInput={3} input={keyWordInput} setKeyWord={setKeyWordInput} />
             </div>
+
         </main>
     );
 }
@@ -91,9 +92,8 @@ function ChangePage(props) {
 
     return(
         <generate> 
-
             <Link to={`/game/${hashedRoom}`}>
-                <button className='button-home'>Próximo</button>  
+                <button className='button-home'>PRÓXIMO</button>  
             </Link>
         </generate>
     );

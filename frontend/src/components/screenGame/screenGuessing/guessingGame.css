@@ -108,3 +108,57 @@
   font-weight: 400;
   line-height: normal;
 }
+
+.popup-overlay {
+  background-color: rgb(0,0,0,0.8);
+}
+
+.Tela {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-sizing: content-box;
+  text-align: center;
+  border-radius: 2vh;
+  width: 36vw;
+}
+
+.Resultado-Mensagem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Resultado-Mensagem-Logo {
+  margin-top: 3vh;
+  background-color: #F4F4F4;
+  border-radius: 50%;
+}
+
+.Resultado-Mensagem-Texto {
+  color: #522B5B;
+}
+
+.Opcao-NovoJogo {
+  display: flex;
+  justify-content: space-between;
+  padding: 5vh 3vw 3vh 3vw;
+  border-color: rgb(0,0,0);
+  gap: 1vw;
+}
+
+.Opcao-NovoJogo-Sim {
+  background-color: #522B5B;
+  border-radius: 1vh;
+  border-style: none;
+  color: white;
+  width: 14.5vw;
+}
+
+.Opcao-NovoJogo-Nao {
+  border-radius: 1vh;
+  width: 14.5vw;
+  border-color: rgb(0,0,0, 0.3);
+  border-width: 0.1vh;
+}

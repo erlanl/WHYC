@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { SHA256 } from 'crypto-js';
 import axios from 'axios';
-import Footer from './footer';
+import Footer from '../common/footer';
+import './home.css';
+
 
 function HomePage() {
   return (
@@ -13,7 +15,6 @@ function HomePage() {
       <div className='mt-auto'>
         <Footer />
       </div>
-     
     </body>
   );
 }
@@ -22,7 +23,7 @@ export default HomePage;
 
 function Header() {
   return (
-    <header className="text-white text-center font-bold mt-12">
+    <header className="text-white text-center font-bold mt-20">
       <h1>WHY.C</h1>
     </header>
   );
@@ -69,7 +70,7 @@ function Main() {
   };
 
   return (
-    <main className="custom-font flex flex-col items-center my-14">
+    <main className="custom-font flex flex-col items-center margin-custom">
       <button className='button-home' onClick={() => {setOpen(o => !o)}}>JOGAR</button>
       <Popup open={open} closeOnDocumentClick={false} modal>
         <PopUpInserirCodigo setOpen={setOpen}/>
@@ -129,7 +130,7 @@ function PopUpInserirCodigo({setOpen}) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center">
       <div className="relative bg-white rounded-lg p-4 custom-width flex flex-col">
         <div className="flex">
             <h2 className="text-lg font-semibold text-custom-color custom-font-inter">Digite o código da sala</h2>
