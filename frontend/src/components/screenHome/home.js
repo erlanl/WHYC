@@ -109,26 +109,6 @@ function PopUpInserirCodigo({setOpen}) {
     }
   };
 
-  const sairSala = async () => {
-    if (!codigo) {
-      alert("Digite o código da sala.");
-      return;
-    }
-
-    try {
-      const res = await axios.post("/leave_room", {
-        room: codigo,
-      });
-
-      if (res.status === 200) {
-        alert("Saiu da sala com sucesso.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao sair da sala.");
-    }
-  };
-
   return (
     <div className="fixed inset-0 flex items-center justify-center">
       <div className="relative bg-white rounded-lg p-4 custom-width flex flex-col">
@@ -146,9 +126,6 @@ function PopUpInserirCodigo({setOpen}) {
         <div class="flex pt-4 justify-end items-start self-stretch">
           <button id="button-send" className=" text-white button-custom-color custom-font-inter mt-2" onClick={entrarSala}>
             Entrar
-          </button>
-          <button id="button-send" className=" text-white button-custom-color custom-font-inter mt-2" onClick={sairSala}>
-            Sair
           </button>
         </div>
       </div>
