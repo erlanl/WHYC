@@ -3,6 +3,7 @@ from threading import Lock
 from configFlask import *
 from api.controllers.connectPlayers import *
 from api.controllers.generateImage import *
+from api.controllers.game import *
 
 active_rooms = {}
 active_rooms_lock = Lock()
@@ -25,7 +26,7 @@ def get_active_rooms_get():
 
 @app.route("/get_answer", methods=["POST"])
 def get_answer_post():
-    return get_answer()
+    return get_answer(active_rooms)
 
 @app.route('/generate-image', methods=['POST'])
 def generate_image_post():

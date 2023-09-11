@@ -24,7 +24,7 @@ def generate_image(active_rooms_lock, active_rooms):
 
     dalle_prompt = gpt_call(key_words["key_words"])
     image_url = dalle_call(dalle_prompt)   #DALLE
-    image_url = stable_diffusion_call(dalle_prompt, credentials) #STABLE DIFFUSION
+    #image_url = stable_diffusion_call(dalle_prompt, credentials) #STABLE DIFFUSION
 
     return make_response(
         jsonify(message='IMAGE URL:', url=image_url)

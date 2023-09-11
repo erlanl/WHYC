@@ -36,10 +36,14 @@ function GameWindow() {
   });
 
   const evalWord = async () => {
+    let codigo = sessionStorage.getItem("codigo")
+    const id = sessionStorage.getItem("id") 
     console.log("id", id)
     try{
       const res = await axios.post("/get_answer", {
         "word": word,
+        "id": id,
+        "room": codigo
       });
       
       if (res.status === 200) {

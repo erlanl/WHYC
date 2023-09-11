@@ -74,20 +74,6 @@ def leave_room(active_rooms_lock, active_rooms):
 def get_active_rooms(active_rooms):
     return jsonify(active_rooms), 200
 
-def get_answer():
-    data = request.json
-    word = data["word"]
-    listWords = ["homem", "lua", "espaco", "astronauta", "terra"]
-
-    exist = word in listWords
-
-    if exist:
-        return jsonify({"correct": True}), 200
-    elif exist == False:
-        return jsonify({"correct": False}), 200
-
-    return jsonify({"message": "We cannot validate the word"}), 400
-
 def is_room_full(active_rooms):
     data = request.json
     hashed_room = compute_hashed_room(data["room"])
