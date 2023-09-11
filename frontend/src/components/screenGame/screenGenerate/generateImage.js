@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateImage.css';
 import { Link } from 'react-router-dom';
+import { SHA256 } from 'crypto-js';
 import astroImage from '../../../images/image.png';
 
 function GenerateImagePage() {
@@ -78,17 +79,8 @@ function KeyWord(props) {
 }
 
 function ChangePage(props) {   
-
-    // Obtém o caminho da URL
-    const path = window.location.pathname;
-
-    // Divide o caminho da URL em partes usando '/'
-    const pathParts = path.split('/');
-
-    // Encontra o índice da parte que segue "/generate-image/"
-    const indexOfGenerateImage = pathParts.indexOf('generate-image');
-    const hashedRoom = pathParts[indexOfGenerateImage + 1];
-    console.log(hashedRoom);
+    let codigo = sessionStorage.getItem("codigo")
+    const hashedRoom = SHA256(codigo).toString();
 
     return(
         <generate> 
@@ -101,13 +93,18 @@ function ChangePage(props) {
 
 function GenerateButton(props) {   
     const generateImageClick = async () => {
+        let codigo = sessionStorage.getItem("codigo")
+        const id = sessionStorage.getItem("id") 
+
         if (props.input.includes("")) {
             alert("Todos as palavras chaves precisam ser definidas");
         }
         else {
             try{
                 const res = await axios.post("http://localhost:5001/generate-image", {
-                    "key_words": props.input
+                    "key_words": props.input,
+                    "id": id,
+                    "room": codigo
                 });
 
                 if (res.status === 200) {

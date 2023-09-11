@@ -1,7 +1,9 @@
 from flask import make_response, jsonify, request
+from api.controllers.connectPlayers import *
 import openai
 import json
 import requests
+
 
 MODEL_GPT = 'gpt-4'
 with open('credentials.json', 'r') as f:
@@ -10,12 +12,19 @@ with open('credentials.json', 'r') as f:
 openai.api_key = credentials['openai_api_key']
 openai.Model.list()
 
-def generate_image():
+def generate_image(active_rooms_lock, active_rooms):
     key_words = request.json
+    sessionID = key_words["id"]
+    room = compute_hashed_room(key_words["room"])
+
+    with active_rooms_lock:
+        if room in active_rooms:
+            if sessionID in active_rooms[room].keys():
+                active_rooms[room][sessionID]["words"] = key_words["key_words"]
 
     dalle_prompt = gpt_call(key_words["key_words"])
     image_url = dalle_call(dalle_prompt)   #DALLE
-    #image_url = stable_diffusion_call(dalle_prompt, credentials) #STABLE DIFFUSION
+    image_url = stable_diffusion_call(dalle_prompt, credentials) #STABLE DIFFUSION
 
     return make_response(
         jsonify(message='IMAGE URL:', url=image_url)

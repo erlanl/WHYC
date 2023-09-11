@@ -40,12 +40,14 @@ function Main() {
     try {
       const codigoGerado = Math.random().toString(36).substring(2, 10);
       setCodigo(codigoGerado);
+      sessionStorage.setItem("codigo", codigoGerado)
 
       const res = await axios.post("/create_room", {
         room: codigoGerado,
       });
 
       if (res.status === 200) {
+        sessionStorage.setItem("id", res.data.id);
         setOpenGCod(true);
 
         const hashedRoom = SHA256(codigo).toString();
@@ -99,7 +101,8 @@ function PopUpInserirCodigo({setOpen}) {
       });
 
       if (res.status === 200) {
-        
+        sessionStorage.setItem("id", res.data.id);
+        sessionStorage.setItem("codigo", codigo)
         const hashedRoom = SHA256(codigo).toString();
         navigate(`/generate-image/${hashedRoom}`);
       }

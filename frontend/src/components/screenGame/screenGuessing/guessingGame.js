@@ -16,6 +16,7 @@ function GameWindow() {
   const [word, setWord] = useState('');
   const [words, setWords] = useState([]);
   const [counter, setCounter] = useState(0);
+  const id = sessionStorage.getItem("id")
 
   useEffect(() => {
     if (counter == 3) {
@@ -35,6 +36,7 @@ function GameWindow() {
   });
 
   const evalWord = async () => {
+    console.log("id", id)
     try{
       const res = await axios.post("/get_answer", {
         "word": word,
