@@ -22,12 +22,12 @@ def generate_image(active_rooms_lock, active_rooms):
             if sessionID in active_rooms[room].keys():
                 active_rooms[room][sessionID]["words"] = key_words["key_words"]
 
-    dalle_prompt = gpt_call(key_words["key_words"])
-    image_url = dalle_call(dalle_prompt)   #DALLE
+    #dalle_prompt = gpt_call(key_words["key_words"])
+    #image_url = dalle_call(dalle_prompt)   #DALLE
     #image_url = stable_diffusion_call(dalle_prompt, credentials) #STABLE DIFFUSION
 
     return make_response(
-        jsonify(message='IMAGE URL:', url=image_url)
+        jsonify(message='IMAGE URL:', url='image_url')
     )
 
 def pass_image(active_rooms_lock, active_rooms):

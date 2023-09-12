@@ -13,4 +13,4 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=60)
 Session(app)
 
 CORS(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")

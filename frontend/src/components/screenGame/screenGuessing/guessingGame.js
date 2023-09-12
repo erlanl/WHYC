@@ -2,6 +2,7 @@ import React, {useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import { useTimer } from 'react-timer-hook';
+import io from 'socket.io-client';
 import './guessingGame.css';
 import Footer from '../../common/footer';
 import iconLose from '../../../images/iconLose.png'
@@ -11,6 +12,7 @@ import { Link } from 'react-router-dom';
 function GameWindow() {
 
   axios.defaults.baseURL = 'http://localhost:5001/';
+  const socket = io('http://localhost:5001');
   const [open, setOpen] = useState(false);
   const [win, setWin] = useState(false);
   const [word, setWord] = useState('');
@@ -18,10 +20,16 @@ function GameWindow() {
   const [counter, setCounter] = useState(0);
   const [images, setImages] = useState([]);
   const [count, setCount] = useState([4]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const id = sessionStorage.getItem("id")
+  let codigo = sessionStorage.getItem("codigo")
 
-  useEffect(() => {
+  socket.emit('run_game', {
+    "id": id,
+    "room": codigo
+  });
+
+  /*useEffect(() => {
     const receiveImage = async () => {
       let codigo = sessionStorage.getItem("codigo")
       const id = sessionStorage.getItem("id") 
@@ -39,14 +47,22 @@ function GameWindow() {
     };
 
     receiveImage();
-  }, []);
+  }, []);*/
 
   useEffect(() => {
-    if (counter == 3) {
-      setOpen(true);
-      setWin(true);
-      pause();
-    }
+
+    socket.on('result', (data) => {
+      if (data.result){
+        setOpen(true);
+        setWin(true);
+        pause();
+      }else{
+        setOpen(true);
+        setWin(false);
+        pause();
+      }
+    });
+
   }, [words]);
 
   const { seconds, isRunning, start, pause, resume, restart } = useTimer({

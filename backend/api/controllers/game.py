@@ -1,4 +1,5 @@
 from flask import request, session, jsonify
+from flask_socketio import SocketIO
 from datetime import datetime, timedelta
 from hashlib import sha256
 from api.controllers.connectPlayers import *
@@ -6,15 +7,28 @@ from PIL import Image, ImageFilter
 from urllib.request import urlretrieve
 from io import BytesIO
 import base64
+from configFlask import *
 
-def run_game():
+def run_game(active_rooms, data):
+    print("Passei aqui")
+    data = data
     start = datetime.now()
+    sessionID = data["id"]
+    room = compute_hashed_room(data["room"])
 
     #Tempo de game
     while datetime.now() - start <= timedelta(seconds=60):
-        pass
+        for player in active_rooms[room].keys():
+            #print("To verificando")
+            #print(active_rooms[room][player]["words"])
+            if len(active_rooms[room][player]["words"]) == 0:
+                if player == sessionID:
+                    socketio.emit('result', {'result': True})
+                else:
+                    socketio.emit('result', {'result': False})
+                    
 
-def get_answer(active_rooms):
+def get_answer(active_rooms, active_rooms_lock):
     data = request.json
     word = data["word"]
     player = data["id"]
@@ -27,6 +41,8 @@ def get_answer(active_rooms):
     exist = word in listWords
 
     if exist:
+        with active_rooms_lock:
+            active_rooms[room][nextPlayer]["words"].delete(word)
         return jsonify({"correct": True}), 200
     elif exist == False:
         return jsonify({"correct": False}), 200

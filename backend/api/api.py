@@ -8,6 +8,10 @@ from api.controllers.game import *
 active_rooms = {}
 active_rooms_lock = Lock()
 
+@socketio.on("run_game")
+def run_game_socket(data):
+    return run_game(active_rooms, data)
+
 @app.route("/create_room", methods=["POST"])
 def create_room_post():
     return create_room(active_rooms_lock, active_rooms)
@@ -26,7 +30,7 @@ def get_active_rooms_get():
 
 @app.route("/get_answer", methods=["POST"])
 def get_answer_post():
-    return get_answer(active_rooms)
+    return get_answer(active_rooms, active_rooms_lock)
 
 @app.route("/get_image", methods=["POST"])
 def image_post():
