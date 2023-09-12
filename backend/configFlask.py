@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "mysecretkey"
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=60)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
 Session(app)
 
 CORS(app)

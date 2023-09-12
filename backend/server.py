@@ -3,7 +3,7 @@ from threading import Thread, Event
 from configFlask import *
 from api import api
 
-SESSION_CLEANUP_INTERVAL = 600
+SESSION_CLEANUP_INTERVAL = 600 # Seconds
 
 def session_cleanup():
     while True:
