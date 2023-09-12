@@ -11,21 +11,16 @@ from configFlask import *
 
 def run_game(active_rooms, data):
     print("Passei aqui")
-    data = data
-    start = datetime.now()
-    sessionID = data["id"]
     room = compute_hashed_room(data["room"])
 
-    #Tempo de game
-    while datetime.now() - start <= timedelta(seconds=60):
-        for player in active_rooms[room].keys():
-            #print("To verificando")
-            #print(active_rooms[room][player]["words"])
-            if len(active_rooms[room][player]["words"]) == 0:
-                if player == sessionID:
-                    socketio.emit('result', {'result': True})
-                else:
-                    socketio.emit('result', {'result': False})
+    for player in active_rooms[room].keys():
+        if len(active_rooms[room][player]["words"]) == 0:
+            listPlayers = list(active_rooms[room].keys())
+            nextPlayer = (listPlayers.index(player) + 1) % 2
+            nextPlayer = listPlayers[nextPlayer]
+            socketio.emit('result', {"result": True, "winner": nextPlayer})
+                
+    return socketio.emit('result', {"result": False})
                     
 
 def get_answer(active_rooms, active_rooms_lock):
@@ -42,7 +37,7 @@ def get_answer(active_rooms, active_rooms_lock):
 
     if exist:
         with active_rooms_lock:
-            active_rooms[room][nextPlayer]["words"].delete(word)
+            active_rooms[room][nextPlayer]["words"].remove(word)
         return jsonify({"correct": True}), 200
     elif exist == False:
         return jsonify({"correct": False}), 200
@@ -56,7 +51,6 @@ def encodeProcess(img: Image):
     return blimg_base64
 
 def get_image(active_rooms):
-    print("ENTREI")
     rejson = request.json
     id = rejson["id"]
     room = compute_hashed_room(rejson["room"])
@@ -75,7 +69,6 @@ def get_image(active_rooms):
         print("Cheguei")
         blimg = imgOr.filter(ImageFilter.BoxBlur(rd*i))
         blurredImages.append(encodeProcess(blimg))
-        print("OLAA")
 
     return {
         "data": blurredImages

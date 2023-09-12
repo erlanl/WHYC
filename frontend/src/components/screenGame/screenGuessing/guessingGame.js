@@ -20,16 +20,11 @@ function GameWindow() {
   const [counter, setCounter] = useState(0);
   const [images, setImages] = useState([]);
   const [count, setCount] = useState([4]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const id = sessionStorage.getItem("id")
   let codigo = sessionStorage.getItem("codigo")
 
-  socket.emit('run_game', {
-    "id": id,
-    "room": codigo
-  });
-
-  /*useEffect(() => {
+  useEffect(() => {
     const receiveImage = async () => {
       let codigo = sessionStorage.getItem("codigo")
       const id = sessionStorage.getItem("id") 
@@ -47,22 +42,26 @@ function GameWindow() {
     };
 
     receiveImage();
-  }, []);*/
+  }, []);
 
   useEffect(() => {
+    socket.emit('run_game', {"id": id, "room": codigo}, () => {});
 
     socket.on('result', (data) => {
-      if (data.result){
-        setOpen(true);
-        setWin(true);
-        pause();
-      }else{
-        setOpen(true);
-        setWin(false);
-        pause();
-      }
-    });
-
+      if (data.result) {
+        if (data.winner == id){
+          setOpen(true);
+          setWin(true);
+          pause();
+          socket.close()
+        }else {
+          setOpen(true);
+          setWin(false);
+          pause();
+          socket.close()
+          } 
+        } 
+      });
   }, [words]);
 
   const { seconds, isRunning, start, pause, resume, restart } = useTimer({
@@ -70,6 +69,7 @@ function GameWindow() {
     onExpire: () => {
       setOpen(true);
       setWin(false);
+      socket.close()
     },
     autoStart: false,
   });
