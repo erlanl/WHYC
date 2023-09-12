@@ -28,3 +28,18 @@ def get_answer(active_rooms):
         return jsonify({"correct": False}), 200
 
     return jsonify({"message": "We cannot validate the word"}), 400
+
+def get_image(active_rooms):
+    rejson = request.json
+    id = rejson["id"]
+    room = compute_hashed_room(rejson["room"])
+    listPlayers = list(active_rooms[room].keys())
+    nextPlayer = (listPlayers.index(id) + 1)%2
+    nextPlayer = listPlayers[nextPlayer]
+    while "images" not in active_rooms[room][nextPlayer].keys():
+        pass
+    images = active_rooms[room][nextPlayer]["images"]
+
+    return {
+        "data": images
+    }

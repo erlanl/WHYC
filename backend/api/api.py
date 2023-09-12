@@ -28,9 +28,17 @@ def get_active_rooms_get():
 def get_answer_post():
     return get_answer(active_rooms)
 
+@app.route("/get_image", methods=["POST"])
+def image_post():
+    return get_image(active_rooms)
+
 @app.route('/generate-image', methods=['POST'])
 def generate_image_post():
     return generate_image(active_rooms_lock, active_rooms)
+
+@app.route('/pass_image', methods=['POST'])
+def pass_image_post():
+    return pass_image(active_rooms_lock, active_rooms)
 
 @app.route('/room_full', methods=['POST'])
 def is_room_full_post():

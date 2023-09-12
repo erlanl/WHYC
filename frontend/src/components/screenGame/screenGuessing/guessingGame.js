@@ -16,7 +16,30 @@ function GameWindow() {
   const [word, setWord] = useState('');
   const [words, setWords] = useState([]);
   const [counter, setCounter] = useState(0);
+  const [images, setImages] = useState([]);
+  const [count, setCount] = useState([4]);
+  const [loading, setLoading] = useState(true);
   const id = sessionStorage.getItem("id")
+
+  useEffect(() => {
+    const receiveImage = async () => {
+      let codigo = sessionStorage.getItem("codigo")
+      const id = sessionStorage.getItem("id") 
+
+      const check = await axios.post("http://localhost:5001/get_image", {
+        "id": id,
+        "room": codigo
+      });
+
+      if (check.status == 200) {
+        setImages(check.data.data);
+        setLoading(false);
+        start();
+      };
+    };
+
+    receiveImage();
+  }, []);
 
   useEffect(() => {
     if (counter == 3) {
@@ -32,8 +55,14 @@ function GameWindow() {
       setOpen(true);
       setWin(false);
     },
-    autoStart: true,
+    autoStart: false,
   });
+
+  useEffect(() => {
+    if (seconds % 15 == 0) {
+      setCount(count - 1);
+    }
+  }, [seconds]);
 
   const evalWord = async () => {
     let codigo = sessionStorage.getItem("codigo")
@@ -82,48 +111,52 @@ function GameWindow() {
   return (
     
     <div className="Game">
-      
-      <header className="Game-header w-full mt-12">
-        <div className='columns-2 w-full flex items-center justify-between'>
+      {loading ? (
+        <div className='pl-30 text-white'>Carregando...</div>
+      ) : (
+            <div>
+              <header className="Game-header w-full mt-12">
+              <div className='columns-2 w-full flex items-center justify-between'>
 
-          <div className='pl-20'>
-          <TimeCount text={formatTime(seconds)}/>
+                <div className='pl-20'>
+                <TimeCount text={formatTime(seconds)}/>
+                </div>
+
+                <div className='items-center content-center'>
+                  <h1 className="logo font-bold">WHY.C</h1>
+                </div>
+
+                <div className='pr-20'>
+                  <TimeCount text={`${counter}/3`}/>
+                </div>
+              </div>
+
+              <div className='pt-8'>
+                <ShowImage image={images[count]}/>
+              </div>
+              
+            </header>
+
+            <div className="divMain">
+
+              <InputGuess
+                handleKeyPress={handleKeyPress}
+                onChange={(e) => setWord(e.target.value)}
+                value={word}
+              />
+
+              <HistoryGuess 
+                words={words} 
+              />
+              
+              <Popup open={open} closeOnDocumentClick={false} modal>
+                <PopupResultado venceu={win} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
+              </Popup>
+
+            </div>
+            <div className='mt-auto'> <Footer/> </div>
           </div>
-
-          <div className='items-center content-center'>
-            <h1 className="logo font-bold">WHY.C</h1>
-          </div>
-
-          <div className='pr-20'>
-            <TimeCount text={`${counter}/3`}/>
-          </div>
-        </div>
-
-        <div className='pt-8'>
-          <ShowImage/>
-        </div>
-        
-      </header>
-
-      <div className="divMain">
-
-        <InputGuess
-          handleKeyPress={handleKeyPress}
-          onChange={(e) => setWord(e.target.value)}
-          value={word}
-        />
-
-        <HistoryGuess 
-          words={words} 
-        />
-        
-        <Popup open={open} closeOnDocumentClick={false} modal>
-          <PopupResultado venceu={win} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
-        </Popup>
-
-      </div>
-      <div className='mt-auto'> <Footer/> </div>
-      
+      )};
     </div>
   );
 }
@@ -147,11 +180,9 @@ function InputGuess({ handleKeyPress, onChange, value }) {
   );
 }
 
-function ShowImage() {
-  let url = sessionStorage.getItem("urlImage")
-  console.log(url)
+function ShowImage(props) {
   return(
-    <img src={url} alt='astro' className='genImg'/>
+    <img src={`data:image/png;base64,${props.image}`} alt='astro' className='genImg'/>
   );
 }
 
@@ -205,9 +236,15 @@ function Resultado ({venceu}) {
 }
 
 function NovoJogo () {
-  const recarregar = () => {
-      window.location.reload();
-  };
+  // Obtém o caminho da URL
+  const path = window.location.pathname;
+
+  // Divide o caminho da URL em partes usando '/'
+  const pathParts = path.split('/');
+
+  // Encontra o índice da parte que segue "/generate-image/"
+  const indexOfGenerateImage = pathParts.indexOf('game');
+  const hashedRoom = pathParts[indexOfGenerateImage + 1];
   return (
       <section className="Texto-NovoJogo">
           <p>Deseja jogar novamente?</p>
@@ -215,7 +252,9 @@ function NovoJogo () {
               <Link to='/'>
                   <button className='Opcao-NovoJogo-Nao'>Não</button>
               </Link>
-              <button className='Opcao-NovoJogo-Sim' onClick={recarregar}>Sim</button>
+              <Link to={`/generate-image/${hashedRoom}`}>
+                  <button className='Opcao-NovoJogo-Sim'>Sim</button>
+              </Link>
           </div>
       </section>
   )

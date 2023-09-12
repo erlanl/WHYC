@@ -3,6 +3,10 @@ from api.controllers.connectPlayers import *
 import openai
 import json
 import requests
+from PIL import Image, ImageFilter
+from urllib.request import urlretrieve
+from io import BytesIO
+import base64
 
 
 MODEL_GPT = 'gpt-4'
@@ -29,6 +33,35 @@ def generate_image(active_rooms_lock, active_rooms):
     return make_response(
         jsonify(message='IMAGE URL:', url=image_url)
     )
+
+def encodeProcess(img: Image):
+    buffer = BytesIO()
+    blimg = img.save(buffer, format='PNG')
+    blimg_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return blimg_base64
+
+def pass_image(active_rooms_lock, active_rooms):
+    image = request.json
+    sessionID = image["id"]
+    room = compute_hashed_room(image["room"])
+
+    with active_rooms_lock:
+        if room in active_rooms:
+            if sessionID in active_rooms[room].keys():
+                url = image["url"]
+                rd = 10
+                blurredImages = []
+                imgOr = Image.open(urlretrieve(url=url)[0])
+                blurredImages.append(encodeProcess(imgOr))
+
+                for i in range(1, 4):
+                    blimg = imgOr.filter(ImageFilter.BoxBlur(rd*i))
+                    blurredImages.append(encodeProcess(blimg))
+                active_rooms[room][sessionID]["images"] = blurredImages
+    
+    return {
+        'message': 'Sucess'
+    }
 
 def gpt_call(key_words):
     gpt_prompt = "Crie um DALLE prompt em inglês utilizando as seguintes palavras:"

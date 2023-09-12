@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './generateImage.css';
 import { Link } from 'react-router-dom';
@@ -36,7 +36,7 @@ function Main() {
                 <Image url={imageURL}/>
                 <div>
                     <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
-                    <ChangePage/>
+                    <ChangePage url={imageURL}/>
                 </div>
             </div>
             <div className='flex flex-col justify-end'>
@@ -82,10 +82,25 @@ function ChangePage(props) {
     let codigo = sessionStorage.getItem("codigo")
     const hashedRoom = SHA256(codigo).toString();
 
+    const passImg = async () => {
+        let codigo = sessionStorage.getItem("codigo")
+        const id = sessionStorage.getItem("id") 
+
+        const res = await axios.post("http://localhost:5001/pass_image", {
+                    "url": props.url,
+                    "id": id,
+                    "room": codigo
+                });
+        
+        if (res.status != 200) {
+            passImg();
+        }
+    };
+
     return(
         <generate> 
-            <Link to={`/game/${hashedRoom}`}>
-                <button className='button-home'>PRÓXIMO</button>  
+            <Link to={`/game/${hashedRoom}`} state={{ url: props.url }}>
+                <button className='button-home' onClick={passImg}>PRÓXIMO</button>  
             </Link>
         </generate>
     );
@@ -94,7 +109,7 @@ function ChangePage(props) {
 function GenerateButton(props) {   
     const generateImageClick = async () => {
         let codigo = sessionStorage.getItem("codigo")
-        const id = sessionStorage.getItem("id") 
+        const id = sessionStorage.getItem("id")
 
         if (props.input.includes("")) {
             alert("Todos as palavras chaves precisam ser definidas");
