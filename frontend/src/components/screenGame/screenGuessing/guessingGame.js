@@ -17,15 +17,13 @@ function GameWindow() {
   const [words, setWords] = useState([]);
   const [counter, setCounter] = useState(0);
   const [images, setImages] = useState([]);
-  const [count, setCount] = useState([4]);
+  const [count, setCount] = useState(4);
   const [loading, setLoading] = useState(true);
   const id = sessionStorage.getItem("id")
+  let codigo = sessionStorage.getItem("codigo")
 
   useEffect(() => {
     const receiveImage = async () => {
-      let codigo = sessionStorage.getItem("codigo")
-      const id = sessionStorage.getItem("id") 
-
       const check = await axios.post("http://localhost:5001/get_image", {
         "id": id,
         "room": codigo
@@ -33,8 +31,14 @@ function GameWindow() {
 
       if (check.status == 200) {
         setImages(check.data.data);
-        setLoading(false);
-        start();
+        const chStatus = await axios.post("http://localhost:5001/change_status", {
+          "id": id,
+          "room": codigo
+        });
+        if (chStatus.status == 200) {
+          setLoading(false);
+          start();
+        };
       };
     };
 
@@ -46,6 +50,15 @@ function GameWindow() {
       setOpen(true);
       setWin(true);
       pause();
+
+      const chSt = async () => {
+        await axios.post("http://localhost:5001/define_win", {
+            "id": id,
+            "room": codigo
+          });
+      };
+
+      chSt();
     }
   }, [words]);
 
@@ -62,6 +75,20 @@ function GameWindow() {
     if (seconds % 15 == 0) {
       setCount(count - 1);
     }
+
+    const checkSt = async () => {
+      const st = await axios.post("http://localhost:5001/check_oponent_status", {
+          "id": id,
+          "room": codigo
+        });
+        console.log(st.data.message)
+        if (st.data.message) {
+          setOpen(true);
+          pause();
+        }
+    };
+
+    checkSt();
   }, [seconds]);
 
   const evalWord = async () => {
@@ -221,14 +248,14 @@ function Resultado ({venceu}) {
   if (venceu) {
       return (
           <section className='Resultado-Mensagem'>
-              <img src={iconWin} className='Resultado-Mensagem-Logo'/>
+              <img src={iconWin} className='Resultado-Mensagem-Logo' alt='Win icon'/>
               <h1 className='Resultado-Mensagem-Texto'>Você venceu!</h1>
           </section>
       )
   } else {
       return (
           <section className="Resultado-Mensagem">
-              <img src={iconLose} className='Resultado-Mensagem-Logo'/>
+              <img src={iconLose} className='Resultado-Mensagem-Logo' alt='Lose icon'/>
               <h1 className='Resultado-Mensagem-Texto'>Você perdeu!</h1>
           </section>
       )

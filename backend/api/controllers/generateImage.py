@@ -38,11 +38,10 @@ def pass_image(active_rooms_lock, active_rooms):
     with active_rooms_lock:
         if room in active_rooms and sessionID in active_rooms[room].keys():
             active_rooms[room][sessionID]["imageURL"] = image["url"]
-            if sessionID in active_rooms[room].keys():
-                url = image["url"]
-                return {
-                    'message': 'Sucess'
-                }
+            active_rooms[room][sessionID]["status"] = "Preparando"
+            return {
+                'message': 'Sucess'
+            }
         return {
             'message': 'Failure'
         }

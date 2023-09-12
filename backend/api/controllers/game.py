@@ -40,7 +40,6 @@ def encodeProcess(img: Image):
     return blimg_base64
 
 def get_image(active_rooms):
-    print("ENTREI")
     rejson = request.json
     id = rejson["id"]
     room = compute_hashed_room(rejson["room"])
@@ -56,11 +55,42 @@ def get_image(active_rooms):
     blurredImages.append(encodeProcess(imgOr))
 
     for i in range(1, 4):
-        print("Cheguei")
         blimg = imgOr.filter(ImageFilter.BoxBlur(rd*i))
         blurredImages.append(encodeProcess(blimg))
-        print("OLAA")
 
     return {
         "data": blurredImages
     }
+
+def change_status(active_rooms):
+    rejson = request.json
+    id = rejson["id"]
+    room = compute_hashed_room(rejson["room"])
+    active_rooms[room][id]["status"] = "Pronto"
+    listPlayers = list(active_rooms[room].keys())
+    nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
+    while "status" not in active_rooms[room][nextPlayer].keys():
+        while active_rooms[room][nextPlayer]["status"] != "Pronto":
+            pass
+    return {
+        "message": True
+    }
+
+def check_status_oponent(active_rooms):
+    rejson = request.json
+    id = rejson["id"]
+    room = compute_hashed_room(rejson["room"])
+    listPlayers = list(active_rooms[room].keys())
+    nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
+    if "status" in active_rooms[room][nextPlayer].keys():
+        if active_rooms[room][nextPlayer]["status"] == "Vitoria":
+            return jsonify({"message": True}), 200
+    return jsonify({"message": False}), 200
+
+def define_win(active_rooms):
+    rejson = request.json
+    id = rejson["id"]
+    room = compute_hashed_room(rejson["room"])
+    active_rooms[room][id]["status"] = "Vitoria"
+
+    return jsonify({"message": "Ok"}), 200

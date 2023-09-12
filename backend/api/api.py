@@ -43,3 +43,15 @@ def pass_image_post():
 @app.route('/room_full', methods=['POST'])
 def is_room_full_post():
     return is_room_full(active_rooms)
+
+@app.route('/change_status', methods=['POST'])
+def change_status_post():
+    return change_status(active_rooms)
+
+@app.route('/check_oponent_status', methods=['POST'])
+def check_oponent_status_post():
+    return check_status_oponent(active_rooms)
+
+@app.route('/define_win', methods=['POST'])
+def define_win_post():
+    return define_win(active_rooms)
