@@ -22,7 +22,7 @@ def create_room(active_rooms_lock, active_rooms):
             return jsonify({"message": "Room already exists."}), 400
 
         active_rooms[hashed_room] = {f"{sessionID}": {"date": datetime.now()}}
-        #active_rooms[hashed_room] = [(sessionID, datetime.now())]
+        
 
     return jsonify({"message": "Room created successfully.",
                     "id": sessionID}), 200

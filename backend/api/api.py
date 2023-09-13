@@ -26,7 +26,7 @@ def get_active_rooms_get():
 
 @app.route("/get_answer", methods=["POST"])
 def get_answer_post():
-    return get_answer(active_rooms)
+    return get_answer(active_rooms_lock, active_rooms)
 
 @app.route("/get_image", methods=["POST"])
 def image_post():
@@ -55,3 +55,7 @@ def check_oponent_status_post():
 @app.route('/define_win', methods=['POST'])
 def define_win_post():
     return define_win(active_rooms)
+
+@app.route('/define_score_win', methods=['POST'])
+def define_score_win_post():
+    return define_score_win(active_rooms)

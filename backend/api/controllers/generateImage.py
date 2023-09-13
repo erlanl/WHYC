@@ -21,6 +21,7 @@ def generate_image(active_rooms_lock, active_rooms):
         if room in active_rooms:
             if sessionID in active_rooms[room].keys():
                 active_rooms[room][sessionID]["words"] = key_words["key_words"]
+                active_rooms[room][sessionID]["score"] = 0
 
     dalle_prompt = gpt_call(key_words["key_words"])
     image_url = dalle_call(dalle_prompt)   #DALLE

@@ -7,17 +7,11 @@ from urllib.request import urlretrieve
 from io import BytesIO
 import base64
 
-def run_game():
-    start = datetime.now()
-
-    #Tempo de game
-    while datetime.now() - start <= timedelta(seconds=60):
-        pass
-
-def get_answer(active_rooms):
+def get_answer(active_rooms_lock, active_rooms):
     data = request.json
     word = data["word"]
     player = data["id"]
+    time = data["time"]
     room = compute_hashed_room(data["room"])
     listPlayers = list(active_rooms[room].keys())
     nextPlayer = (listPlayers.index(player) + 1) % 2
@@ -27,7 +21,10 @@ def get_answer(active_rooms):
     exist = word in listWords
 
     if exist:
+        with active_rooms_lock:
+            active_rooms[room][player]["score"] += 20000 * (0.3/(60-int(time)))
         return jsonify({"correct": True}), 200
+    
     elif exist == False:
         return jsonify({"correct": False}), 200
 
@@ -94,3 +91,20 @@ def define_win(active_rooms):
     active_rooms[room][id]["status"] = "Vitoria"
 
     return jsonify({"message": "Ok"}), 200
+
+def define_score_win(active_rooms):
+    data = request.json
+    room = compute_hashed_room(data["room"])
+    id = data["id"]
+    
+    listPlayers = list(active_rooms[room].keys())
+    nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
+
+    if active_rooms[room][id]["score"] > active_rooms[room][nextPlayer]["score"]:
+        active_rooms[room][id]["status"] = "Vitoria"
+        return jsonify({"message": True}), 200
+    
+    active_rooms[room][nextPlayer]["status"] = "Vitoria"
+    return jsonify({"message": False}), 200
+    
+    

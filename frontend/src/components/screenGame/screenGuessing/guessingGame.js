@@ -62,11 +62,36 @@ function GameWindow() {
     }
   }, [words]);
 
+  const defineWiner = async () => {
+    console.log("Passei na definição")
+  };
+
+  const checkSt = async () => {
+    const st = await axios.post("http://localhost:5001/check_oponent_status", {
+        "id": id,
+        "room": codigo
+      });
+      console.log(st.data.message)
+      if (st.data.message) {
+        setOpen(true);
+        pause();
+      }
+  };
+
+
   const { seconds, isRunning, start, pause, resume, restart } = useTimer({
     expiryTimestamp: new Date().getTime() + 60000,
-    onExpire: () => {
+    onExpire: async () => {
+      console.log("Tempo terminou")
+      const defineWin = await axios.post("http://localhost:5001/define_score_win", {
+      "room": codigo,
+      "id"  : id
+       });
+
+      if (defineWin.data.message){
+        setWin(true);
+      }
       setOpen(true);
-      setWin(false);
     },
     autoStart: false,
   });
@@ -76,30 +101,26 @@ function GameWindow() {
       setCount(count - 1);
     }
 
-    const checkSt = async () => {
-      const st = await axios.post("http://localhost:5001/check_oponent_status", {
-          "id": id,
-          "room": codigo
-        });
-        console.log(st.data.message)
-        if (st.data.message) {
-          setOpen(true);
-          pause();
-        }
-    };
-
     checkSt();
   }, [seconds]);
+
+  const formatTime = (time) => {
+    const seconds = (time % 60).toString().padStart(2, '0');
+    return `${seconds}`;
+  };
+
 
   const evalWord = async () => {
     let codigo = sessionStorage.getItem("codigo")
     const id = sessionStorage.getItem("id") 
     console.log("id", id)
     try{
+      let time = formatTime(seconds);
       const res = await axios.post("/get_answer", {
         "word": word,
         "id": id,
-        "room": codigo
+        "room": codigo,
+        "time": time
       });
       
       if (res.status === 200) {
@@ -129,11 +150,6 @@ function GameWindow() {
       console.log(counter);
     }
   }
-
-  const formatTime = (time) => {
-    const seconds = (time % 60).toString().padStart(2, '0');
-    return `${seconds}`;
-  };
 
   return (
     
