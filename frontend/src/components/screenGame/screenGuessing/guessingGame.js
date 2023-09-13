@@ -97,7 +97,7 @@ function GameWindow() {
   });
 
   useEffect(() => {
-    if (seconds % 15 == 0) {
+    if (seconds % 15 == 0 && seconds != 0) {
       setCount(count - 1);
     }
 
@@ -105,7 +105,7 @@ function GameWindow() {
   }, [seconds]);
 
   const formatTime = (time) => {
-    const seconds = (time % 60).toString().padStart(2, '0');
+    const seconds = (time % 61).toString().padStart(2, '0');
     return `${seconds}`;
   };
 
