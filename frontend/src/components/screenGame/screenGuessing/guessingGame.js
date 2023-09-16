@@ -134,22 +134,32 @@ function GameWindow() {
     }
   };
 
+  const isWordInList = (inputValue) => {
+    return (words) => {
+      const count = words.filter((word) => word[0] === inputValue).length;
+      return count === 0;
+    };
+  };
+
   const handleKeyPress = async (event) => {
     if (event.key === 'Enter' && word.trim() !== '') {
-
       let value = await evalWord();
-
-      if (value){
-        setCounter(counter + 1);
+      const isUnique = isWordInList(word)(words);
+  
+      if (isUnique) {
+          if (value) {
+            setCounter(counter + 1);
+          }
+          setWords([...words, [word, value]]);
+          console.log(words);
+          setWord('');
+          console.log(counter);
+      } 
+      else {
+        alert('A palavra já existe na lista!');
       }
-      
-      setWords([...words, [word, value]]);
-      console.log(words);
-      setWord('');
-
-      console.log(counter);
     }
-  }
+  }  
 
   return (
     
@@ -184,7 +194,7 @@ function GameWindow() {
 
               <InputGuess
                 handleKeyPress={handleKeyPress}
-                onChange={(e) => setWord(e.target.value)}
+                onChange={(e) => setWord(e.target.value.toLowerCase())}
                 value={word}
               />
 
