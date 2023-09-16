@@ -68,7 +68,7 @@ function KeyWord(props) {
                 onChange={(e) => props.setKeyWord(
                     props.input.map((inputKeyWord, index) => {
                         if (index === props.numInput-1) {
-                            return e.target.value;
+                            return e.target.value.toLowerCase();
                         }
                         return inputKeyWord;
                     })
@@ -109,12 +109,21 @@ function ChangePage(props) {
 function GenerateButton(props) {   
     const [isLoading, setIsLoading] = useState(false);
 
+    const hasDuplicates = (keywordList) => {
+        const cleanedKeywords = keywordList.map((keyword) => keyword.trim().toLowerCase());
+        const uniqueKeywords = [...new Set(cleanedKeywords)];
+        return cleanedKeywords.length !== uniqueKeywords.length;
+    };
+    
     const generateImageClick = async () => {
         let codigo = sessionStorage.getItem("codigo")
         const id = sessionStorage.getItem("id")
 
         if (props.input.includes("")) {
-            alert("Todos as palavras chaves precisam ser definidas");
+            alert("Todas as palavras-chave precisam ser definidas!");
+        }
+        else if (hasDuplicates(props.input)) {
+            alert("Palavras-chave não podem ser iguais!");
         }
         else {
             try{
