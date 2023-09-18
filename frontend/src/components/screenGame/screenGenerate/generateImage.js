@@ -29,14 +29,16 @@ function Header() {
 function Main() {
     const [keyWordInput, setKeyWordInput] = useState(["", "", ""]);
     const [imageURL, setImageURL] = useState(null);
+    const [showChangePage, setShowChangePage] = useState(false);
+
 
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
             <div className='flex flex-col items-center content-center'>
                 <Image url={imageURL}/>
                 <div>
-                    <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
-                    <ChangePage url={imageURL}/>
+                    <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL} setShowChangePage={setShowChangePage}/>
+                    {showChangePage && <ChangePage url={imageURL} />}
                 </div>
             </div>
             <div className='flex flex-col justify-end'>
@@ -100,7 +102,7 @@ function ChangePage(props) {
     return(
         <generate> 
             <Link to={`/game/${hashedRoom}`} state={{ url: props.url }}>
-                <button className='button-home' onClick={passImg}>PRÓXIMO</button>  
+                <button className='button-home' onClick={passImg}>DESAFIAR</button>  
             </Link>
         </generate>
     );
@@ -142,6 +144,8 @@ function GenerateButton(props) {
                     sessionStorage.setItem("urlImage", dalleURL);
                     //alert(dalleURL);
                     props.setKeyWord(["", "", ""]);
+                    
+                    props.setShowChangePage(true);
                 }
                 else {
                     alert("ERROR: " + res.status);
