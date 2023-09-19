@@ -59,10 +59,11 @@ def gpt_call(key_words):
             #{"role": "system", "content": ""},
             {"role": "user", "content": gpt_prompt}
         ],
-        temperature = 1,
+        temperature = 1.5,
     )
     dalle_prompt = gpt_response['choices'][0]['message']['content']
     dalle_prompt = dalle_prompt[1:-1]
+    dalle_prompt = dalle_prompt + " Detailed, Award-Winning Art, Trending on ArtStation, Photorealistic, 4K/8K"
     print(f"DALLE PROMPT -> {dalle_prompt}")
     
     return dalle_prompt
