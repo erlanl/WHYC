@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { SHA256 } from 'crypto-js';
 import axios from 'axios';
+import Header from '../common/header';
 import Footer from '../common/footer';
 import './home.css';
 
@@ -12,7 +13,7 @@ function HomePage() {
     <body className="custom-font bg-custom-color flex flex-col min-h-screen">
       <Header />
       <Main />
-      <div className='mt-auto'>
+      <div className="mt-auto">
         <Footer />
       </div>
     </body>
@@ -20,14 +21,6 @@ function HomePage() {
 }
 
 export default HomePage;
-
-function Header() {
-  return (
-    <header className="text-white text-center font-bold mt-20">
-      <h1>WHY.C</h1>
-    </header>
-  );
-}
 
 function Main() {
   const [open, setOpen] = useState(false);
@@ -72,12 +65,12 @@ function Main() {
   };
 
   return (
-    <main className="custom-font flex flex-col items-center margin-custom">
-      <button className='button-home' onClick={() => {setOpen(o => !o)}}>JOGAR</button>
+    <main className="custom-font flex flex-col items-center mt-4">
+      <button className='three-d-base button-home' onClick={() => {setOpen(o => !o)}}>JOGAR</button>
       <Popup open={open} closeOnDocumentClick={false} modal>
         <PopUpInserirCodigo setOpen={setOpen}/>
       </Popup>
-      <button className='button-home' onClick={criarSala}>CRIAR SALA</button>
+      <button className='three-d-base button-home' onClick={criarSala}>CRIAR SALA</button>
       <Popup open={openGCod} modal>
          <PopUpGerarCodigo setOpen={setOpenGCod} codigo={codigo} />
       </Popup>
