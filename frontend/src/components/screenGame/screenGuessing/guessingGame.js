@@ -274,13 +274,6 @@ function TimeCount({text}){
 }
 
 function PopupResultado (props) {
-  let codigo = sessionStorage.getItem("codigo")
-  const id = sessionStorage.getItem("id")
-  const redfunc = async () => {await axios.post("http://localhost:5001/redefine_game",  {
-    "id": id,
-    "room": codigo
-  })};
-  redfunc();
   return (
       <div className='Tela'>
           <Resultado venceu={props.venceu} pontos={props.pontos} opPontos={props.opPontos}/>
@@ -330,6 +323,14 @@ function NovoJogo () {
   // Encontra o índice da parte que segue "/generate-image/"
   const indexOfGenerateImage = pathParts.indexOf('game');
   const hashedRoom = pathParts[indexOfGenerateImage + 1];
+
+  let codigo = sessionStorage.getItem("codigo")
+  const id = sessionStorage.getItem("id")
+  const redfunc = async () => {await axios.post("http://localhost:5001/redefine_game",  {
+    "id": id,
+    "room": codigo
+  })};
+
   return (
       <section className="Texto-NovoJogo">
           <p>Deseja jogar novamente?</p>
@@ -338,7 +339,7 @@ function NovoJogo () {
                   <button className='Opcao-NovoJogo-Nao'>Não</button>
               </Link>
               <Link to={`/generate-image/${hashedRoom}`}>
-                  <button className='Opcao-NovoJogo-Sim'>Sim</button>
+                  <button className='Opcao-NovoJogo-Sim' onClick={redfunc}>Sim</button>
               </Link>
           </div>
       </section>
