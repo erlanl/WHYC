@@ -59,3 +59,7 @@ def define_win_post():
 @app.route('/define_score_win', methods=['POST'])
 def define_score_win_post():
     return define_score_win(active_rooms)
+
+@app.route('/redefine_game', methods=['POST'])
+def redefine_game_post():
+    return redefine_game(active_rooms)
