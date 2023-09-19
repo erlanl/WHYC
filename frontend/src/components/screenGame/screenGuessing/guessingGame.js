@@ -19,6 +19,8 @@ function GameWindow() {
   const [images, setImages] = useState([]);
   const [count, setCount] = useState(3);
   const [loading, setLoading] = useState(true);
+  const [pontos, setPontos] = useState(0);
+  const [opPontos, setOpPontos] = useState(0);
   const id = sessionStorage.getItem("id")
   let codigo = sessionStorage.getItem("codigo")
 
@@ -91,6 +93,8 @@ function GameWindow() {
       if (defineWin.data.message){
         setWin(true);
       }
+      setPontos(defineWin.data.score);
+      setOpPontos(defineWin.data.opScore);
       setOpen(true);
     },
     autoStart: false,
@@ -211,7 +215,7 @@ function GameWindow() {
               />
               
               <Popup open={open} closeOnDocumentClick={false} modal>
-                <PopupResultado venceu={win} /> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
+                <PopupResultado venceu={win} pontos={pontos} opPontos={opPontos}/> {/* Aqui passamos true para venceu quando o jogador ganha e false quando perde */}
               </Popup>
 
             </div>
@@ -269,21 +273,29 @@ function TimeCount({text}){
   );
 }
 
-function PopupResultado ({venceu}) {
+function PopupResultado (props) {
+  let codigo = sessionStorage.getItem("codigo")
+  const id = sessionStorage.getItem("id")
+  const redfunc = async () => {await axios.post("http://localhost:5001/redefine_game",  {
+    "id": id,
+    "room": codigo
+  })};
+  redfunc();
   return (
       <div className='Tela'>
-          <Resultado venceu={venceu} />
+          <Resultado venceu={props.venceu} pontos={props.pontos} opPontos={props.opPontos}/>
           <NovoJogo />
       </div>
   )
 }
 
-function Resultado ({venceu}) {
-  if (venceu) {
+function Resultado (props) {
+  if (props.venceu) {
       return (
           <section className='Resultado-Mensagem'>
               <img src={iconWin} className='Resultado-Mensagem-Logo' alt='Win icon'/>
               <h1 className='Resultado-Mensagem-Texto'>Você venceu!</h1>
+              <Pontuacao pontos={props.pontos} opPontos={props.opPontos} />
           </section>
       )
   } else {
@@ -291,8 +303,20 @@ function Resultado ({venceu}) {
           <section className="Resultado-Mensagem">
               <img src={iconLose} className='Resultado-Mensagem-Logo' alt='Lose icon'/>
               <h1 className='Resultado-Mensagem-Texto'>Você perdeu!</h1>
+              <Pontuacao pontos={props.pontos} opPontos={props.opPontos} />
           </section>
       )
+  }
+}
+
+function Pontuacao (props) {
+  if (props.pontos != 0 || props.opPontos != 0) {
+    return (
+      <div className='Resultado-pontuacao'>
+                <p>Sua pontuação: {props.pontos}</p>
+                <p>Pontuação do oponente: {props.opPontos}</p>
+      </div>
+    )
   }
 }
 

@@ -43,7 +43,7 @@ def get_image(active_rooms):
     listPlayers = list(active_rooms[room].keys())
     nextPlayer = (listPlayers.index(id) + 1)%2
     nextPlayer = listPlayers[nextPlayer]
-    while "imageURL" not in active_rooms[room][nextPlayer].keys():
+    while active_rooms[room][nextPlayer]["imageURL"] == "":
         pass
     url = active_rooms[room][nextPlayer]["imageURL"]
     rd = 10
@@ -66,9 +66,8 @@ def change_status(active_rooms):
     active_rooms[room][id]["status"] = "Pronto"
     listPlayers = list(active_rooms[room].keys())
     nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
-    while "status" not in active_rooms[room][nextPlayer].keys():
-        while active_rooms[room][nextPlayer]["status"] != "Pronto":
-            pass
+    while active_rooms[room][nextPlayer]["status"] != "Pronto":
+        pass
     return {
         "message": True
     }
@@ -79,9 +78,8 @@ def check_status_oponent(active_rooms):
     room = compute_hashed_room(rejson["room"])
     listPlayers = list(active_rooms[room].keys())
     nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
-    if "status" in active_rooms[room][nextPlayer].keys():
-        if active_rooms[room][nextPlayer]["status"] == "Vitoria":
-            return jsonify({"message": True}), 200
+    if active_rooms[room][nextPlayer]["status"] == "Vitoria":
+        return jsonify({"message": True}), 200
     return jsonify({"message": False}), 200
 
 def define_win(active_rooms):
@@ -102,9 +100,23 @@ def define_score_win(active_rooms):
 
     if active_rooms[room][id]["score"] > active_rooms[room][nextPlayer]["score"]:
         active_rooms[room][id]["status"] = "Vitoria"
-        return jsonify({"message": True}), 200
+        return jsonify({"message": True, "score": active_rooms[room][id]["score"], "opScore": active_rooms[room][nextPlayer]["score"]}), 200
     
     active_rooms[room][nextPlayer]["status"] = "Vitoria"
-    return jsonify({"message": False}), 200
+    return jsonify({"message": False, "score": active_rooms[room][id]["score"], "opScore": active_rooms[room][nextPlayer]["score"]}), 200
+
+def redefine_game(active_rooms):
+    data = request.json
+    room = compute_hashed_room(data["room"])
+    id = data["id"]
     
+    listPlayers = list(active_rooms[room].keys())
+    nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
+
+    active_rooms[room][id]["imageURL"] = ""
+    active_rooms[room][nextPlayer]["imageURL"] = ""
+    active_rooms[room][id]["status"] = "Preparando"
+    active_rooms[room][nextPlayer]["status"] = "Preparando"
+
+    return jsonify({"message": True}), 200
     

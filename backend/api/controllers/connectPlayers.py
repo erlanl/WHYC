@@ -22,6 +22,8 @@ def create_room(active_rooms_lock, active_rooms):
             return jsonify({"message": "Room already exists."}), 400
 
         active_rooms[hashed_room] = {f"{sessionID}": {"date": datetime.now()}}
+        active_rooms[hashed_room][f"{sessionID}"]["status"] = ""
+        active_rooms[hashed_room][f"{sessionID}"]["imageURL"] = ""
         
 
     return jsonify({"message": "Room created successfully.",
@@ -44,6 +46,8 @@ def join_room(active_rooms_lock, active_rooms):
             return jsonify({"message": "Room is full."}), 400
 
         active_sessions[f"{sessionID}"] = {"date": datetime.now()}
+        active_sessions[f"{sessionID}"]["status"] = ""
+        active_sessions[f"{sessionID}"]["imageURL"] = ""
         #active_sessions.append((sessionID, datetime.now()))
 
         if len(active_sessions) == 2:
