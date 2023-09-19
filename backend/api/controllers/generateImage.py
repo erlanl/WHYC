@@ -3,13 +3,13 @@ from api.controllers.connectPlayers import *
 import openai
 import json
 import requests
-
+from dotenv import dotenv_values
 
 MODEL_GPT = 'gpt-4'
-with open('credentials.json', 'r') as f:
-    credentials = json.load(f)
 
-openai.api_key = credentials['openai_api_key']
+credentials = dotenv_values(".env")
+
+openai.api_key = credentials['OPENAI_API_KEY']
 openai.Model.list()
 
 def generate_image(active_rooms_lock, active_rooms):

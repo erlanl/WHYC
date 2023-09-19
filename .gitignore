@@ -8,6 +8,7 @@
 
 #API keys
 /backend/credentials.json
+.env
 
 # testing
 /frontend/coverage
@@ -17,7 +18,7 @@
 
 # misc
 /backend/flask_session
-
+flask_session
 
 /frontend/.DS_Store
 /frontend/.env.local
@@ -36,5 +37,7 @@
 */__pycache__
 */api/__pycache__
 */api/controllers/__pycache__
-#Credentials
-/backend/credentials.json
+__pycache__
+/backend/__pycache__
+/backend/api/__pycache__
+/backend/api/controllers/__pycache__
