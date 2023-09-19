@@ -90,6 +90,17 @@ def define_win(active_rooms):
 
     return jsonify({"message": "Ok"}), 200
 
+def return_score(active_rooms):
+    data = request.json
+    room = compute_hashed_room(data["room"])
+    id = data["id"]
+
+    listPlayers = list(active_rooms[room].keys())
+    nextPlayer = listPlayers[(listPlayers.index(id)+1)%2]
+
+    return jsonify({"score": active_rooms[room][id]["score"], "opScore": active_rooms[room][nextPlayer]["score"]}), 200
+    
+
 def define_score_win(active_rooms):
     data = request.json
     room = compute_hashed_room(data["room"])
