@@ -31,13 +31,13 @@ function GameWindow() {
         "room": codigo
       });
 
-      if (check.status == 200) {
+      if (check.status === 200) {
         setImages(check.data.data);
         const chStatus = await axios.post("http://localhost:5001/change_status", {
           "id": id,
           "room": codigo
         });
-        if (chStatus.status == 200) {
+        if (chStatus.status === 200) {
           setLoading(false);
           start();
         };
@@ -48,7 +48,7 @@ function GameWindow() {
   }, []);
 
   useEffect(() => {
-    if (counter == 3) {
+    if (counter === 3) {
       setOpen(true);
       setWin(true);
       pause();
@@ -101,7 +101,7 @@ function GameWindow() {
   });
 
   useEffect(() => {
-    if (seconds % 15 == 0 && seconds != 0) {
+    if (seconds % 15 === 0 && seconds != 0) {
       setCount(count - 1);
     }
 
