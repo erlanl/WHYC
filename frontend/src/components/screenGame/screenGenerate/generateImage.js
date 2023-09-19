@@ -3,7 +3,9 @@ import axios from 'axios';
 import './generateImage.css';
 import { Link } from 'react-router-dom';
 import { SHA256 } from 'crypto-js';
-import astroImage from '../../../images/image.png';
+import bgImage from '../../../images/background.png';
+import Header from '../../common/header';
+import Footer from '../../common/footer';
 
 function GenerateImagePage() {
     return (
@@ -11,32 +13,23 @@ function GenerateImagePage() {
             <Header />
             <Main />
             <Footer />
-            
         </body>
     );
 }
 export default GenerateImagePage;
 
-
-function Header() {
-    return (
-      <header className="text-white text-center font-bold mt-12">
-        <h1>WHY.C</h1>
-      </header>
-    );
-}
-
 function Main() {
     const [keyWordInput, setKeyWordInput] = useState(["", "", ""]);
-    const [imageURL, setImageURL] = useState(null);
-
+    const [imageURL, setImageURL] = useState(bgImage);
+    const [showChangePage, setShowChangePage] = useState(false);
+    
     return (
         <main className='flex flex-line items-center justify-center space-x-40'>
             <div className='flex flex-col items-center content-center'>
                 <Image url={imageURL}/>
                 <div>
-                    <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL}/>
-                    <ChangePage url={imageURL}/>
+                    <GenerateButton input={keyWordInput} setKeyWord={setKeyWordInput} setURL={setImageURL} url={imageURL} setShowChangePage={setShowChangePage}/>
+                    {showChangePage && <ChangePage url={imageURL} />}
                 </div>
             </div>
             <div className='flex flex-col justify-end'>
@@ -62,7 +55,7 @@ function KeyWord(props) {
         <keyword className='flex flex-line pb-3 justify-end items-center'>
             <num className='pr-3 text-2xl text-font-bege'>{props.numInput}.</num>
             <input type="text" name="inputKeyword" id="inputKeyword"
-                className="block rounded-md py-5 pr-20 sm:text-lg inputLabel"
+                className="block rounded-md py-5 pr-20 inputLabel"
                 placeholder="Insira a palavra chave aqui"
                 value={props.input[props.numInput-1]}
                 onChange={(e) => props.setKeyWord(
@@ -100,7 +93,7 @@ function ChangePage(props) {
     return(
         <generate> 
             <Link to={`/game/${hashedRoom}`} state={{ url: props.url }}>
-                <button className='button-home' onClick={passImg}>PRÓXIMO</button>  
+                <button className='three-d-base button-gImage' onClick={passImg}>DESAFIAR</button>  
             </Link>
         </generate>
     );
@@ -142,6 +135,8 @@ function GenerateButton(props) {
                     sessionStorage.setItem("urlImage", dalleURL);
                     //alert(dalleURL);
                     props.setKeyWord(["", "", ""]);
+                    
+                    props.setShowChangePage(true);
                 }
                 else {
                     alert("ERROR: " + res.status);
@@ -165,16 +160,8 @@ function GenerateButton(props) {
                     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
                 </svg>
             ) : (
-                <button className='button-home' onClick={generateImageClick}>GERAR</button>
+                <button className='three-d-base button-gImage' onClick={generateImageClick}>GERAR</button>
             )}
         </generate>
-    );
-}
-
-function Footer() {
-    return (
-      <footer className="p-4 mt-auto">
-        <p class="text-white text-right text-xs leading-normal">Todos os direitos reservados a Los Hermanos ©</p>
-      </footer>
     );
 }
