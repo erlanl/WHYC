@@ -204,7 +204,7 @@ function GameWindow() {
                 </div>
               </div>
 
-              <div className='pt-8'>
+              <div className='pt-20'>
                 <ShowImage image={images[count]}/>
               </div>
               
@@ -238,7 +238,7 @@ export default GameWindow;
 
 function InputGuess({ handleKeyPress, onChange, value }) {
   return (
-    <div className="inputWord pt-10">
+    <div className="inputWord pt-10 mb-5">
       <input
         type="text"
         name="inputGuess"
@@ -246,7 +246,7 @@ function InputGuess({ handleKeyPress, onChange, value }) {
         value={value}
         onChange={onChange}
         onKeyPress={handleKeyPress}
-        className="block w-full rounded-md py-1.5 pr-20 sm:text-sm sm:leading-6 inputLabel"
+        className="inputLabelGuessing block w-full rounded-md py-1.5 pr-20 sm:text-sm sm:leading-6"
         placeholder="Digite uma palavra"
       />
     </div>
