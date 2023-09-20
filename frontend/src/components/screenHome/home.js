@@ -7,6 +7,7 @@ import Header from '../common/header';
 import Footer from '../common/footer';
 import './home.css';
 
+import serverUrlBase from '../common/urlServer'
 
 function HomePage() {
   return (
@@ -27,7 +28,8 @@ function Main() {
   const [openGCod, setOpenGCod] = useState(false);
   const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
-  axios.defaults.baseURL = 'http://localhost:5001/';
+  let url = serverUrlBase + "/"
+  axios.defaults.baseURL = 'http://172.20.4.157:5001';
 
   const criarSala = async () => {
     try {
@@ -35,7 +37,8 @@ function Main() {
       setCodigo(codigoGerado);
       sessionStorage.setItem("codigo", codigoGerado)
 
-      const res = await axios.post("/create_room", {
+      let url = serverUrlBase + "/create_room"
+      const res = await axios.post(url, {
         room: codigoGerado,
       });
 
@@ -43,9 +46,10 @@ function Main() {
         sessionStorage.setItem("id", res.data.id);
         setOpenGCod(true);
 
+        let url = serverUrlBase + "/room_full";
         const hashedRoom = SHA256(codigo).toString();
         try{
-          const res2 = await axios.post("/room_full", {
+          const res2 = await axios.post(url, {
           room: codigoGerado,
         });
 
@@ -88,8 +92,9 @@ function PopUpInserirCodigo({setOpen}) {
       return;
     }
 
+    let url = serverUrlBase + "/join_room";
     try {
-      const res = await axios.post("/join_room", {
+      const res = await axios.post(url, {
         room: codigo,
       });
 

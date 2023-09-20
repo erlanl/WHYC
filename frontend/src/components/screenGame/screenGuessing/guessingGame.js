@@ -8,9 +8,11 @@ import iconLose from '../../../images/iconLose.png'
 import iconWin from '../../../images/iconWin.png'
 import { Link } from 'react-router-dom';
 
+import serverUrlBase from '../../common/urlServer'
+
 function GameWindow() {
 
-  axios.defaults.baseURL = 'http://localhost:5001/';
+  axios.defaults.baseURL = serverUrlBase + "/";
   const [open, setOpen] = useState(false);
   const [win, setWin] = useState(false);
   const [word, setWord] = useState('');
@@ -26,14 +28,16 @@ function GameWindow() {
 
   useEffect(() => {
     const receiveImage = async () => {
-      const check = await axios.post("http://localhost:5001/get_image", {
+      let url = serverUrlBase + "/get_image"
+      const check = await axios.post(url, {
         "id": id,
         "room": codigo
       });
 
       if (check.status === 200) {
         setImages(check.data.data);
-        const chStatus = await axios.post("http://localhost:5001/change_status", {
+        let url = serverUrlBase + "/change_status"
+        const chStatus = await axios.post(url, {
           "id": id,
           "room": codigo
         });
@@ -54,7 +58,8 @@ function GameWindow() {
       pause();
 
       const chSt = async () => {
-        await axios.post("http://localhost:5001/define_win", {
+        let url = serverUrlBase + "/define_win"
+        await axios.post(url, {
             "id": id,
             "room": codigo
           });
@@ -69,7 +74,8 @@ function GameWindow() {
   };
 
   const checkSt = async () => {
-    const st = await axios.post("http://localhost:5001/check_oponent_status", {
+    let url = serverUrlBase + "/check_oponent_status"
+    const st = await axios.post(url, {
         "id": id,
         "room": codigo
       });
@@ -85,7 +91,8 @@ function GameWindow() {
     expiryTimestamp: new Date().getTime() + 60000,
     onExpire: async () => {
       console.log("Tempo terminou")
-      const defineWin = await axios.post("http://localhost:5001/define_score_win", {
+      let url = serverUrlBase + "/define_score_win"
+      const defineWin = await axios.post(url, {
       "room": codigo,
       "id"  : id
        });
@@ -120,7 +127,8 @@ function GameWindow() {
     console.log("id", id)
     try{
       let time = formatTime(seconds);
-      const res = await axios.post("/get_answer", {
+      let url = serverUrlBase + "/get_answer"
+      const res = await axios.post(url, {
         "word": word,
         "id": id,
         "room": codigo,
@@ -326,7 +334,8 @@ function NovoJogo () {
 
   let codigo = sessionStorage.getItem("codigo")
   const id = sessionStorage.getItem("id")
-  const redfunc = async () => {await axios.post("http://localhost:5001/redefine_game",  {
+  let url = serverUrlBase + "/redefine_game"
+  const redfunc = async () => {await axios.post(url,  {
     "id": id,
     "room": codigo
   })};

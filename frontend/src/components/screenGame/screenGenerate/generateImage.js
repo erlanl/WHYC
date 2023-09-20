@@ -7,6 +7,8 @@ import bgImage from '../../../images/background.png';
 import Header from '../../common/header';
 import Footer from '../../common/footer';
 
+import serverUrlBase from '../../common/urlServer'
+
 function GenerateImagePage() {
     return (
         <body className="custom-font min-h-screen bg-custom-color flex flex-col">
@@ -79,7 +81,8 @@ function ChangePage(props) {
         let codigo = sessionStorage.getItem("codigo")
         const id = sessionStorage.getItem("id") 
 
-        const res = await axios.post("http://localhost:5001/pass_image", {
+        let url = serverUrlBase + "/pass_image"
+        const res = await axios.post(url, {
                     "url": props.url,
                     "id": id,
                     "room": codigo
@@ -122,7 +125,8 @@ function GenerateButton(props) {
             try{
                 setIsLoading(true);
 
-                const res = await axios.post("http://localhost:5001/generate-image", {
+                let url = serverUrlBase + "/generate-image"
+                const res = await axios.post(url, {
                     "key_words": props.input,
                     "id": id,
                     "room": codigo
