@@ -15,7 +15,18 @@ _WHY.C_ é um webapp interativo que desafia 2 jogadores a competirem em uma corr
 pip install -r requirements.txt
 ```
 
-### Rodando o projeto
+### Adicionando key do OpenAI
+Para adicionar a key do OpenAI nesse projeto, é necessário que os seguintes passos sejam seguidos:
+
+- Crie um arquivo .env **fora do diretório 'backend'**
+- Copie a linha abaixo e cole no arquivo .env criado
+
+  ```shell
+  OPENAI_API_KEY=""
+  ```
+- No arquivo .env, entre as aspas em OPENAI_API_KEY="", bote a key do OpenAI
+
+### Rodando o backend
 ```shell
 # Dentro do diretório 'backend'
 python3 server.py
@@ -27,19 +38,17 @@ python3 server.py
 - React Router Dom
 - React Popup
 - Crypto JS
+- Axios
 
 [![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://react.dev/)
 
 ### Instalando dependências
 ```shell
 # Dentro do diretório 'frontend'
-npm install react-scripts
-npm install react-router-dom
-npm install reactjs-popup
-npm install crypto-js
+npm install
 ```
 
-### Rodando o projeto
+### Rodando o frontend
 ```shell
 # Dentro do diretório 'frontend'
 npm start
