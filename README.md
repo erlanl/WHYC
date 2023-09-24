@@ -53,3 +53,12 @@ npm install
 # Dentro do diretório 'frontend'
 npm start
 ```
+
+## Instruções Para Poder Jogar Localmente
+**Atenção:** Todos as máquinas da rede poderão se conectar ao jogo desde que 1 delas esteja rodando o projeto, as outras não precisam rodar nada.
+- Copie o ip da máquina que irá rodar o projeto
+- Abra o arquivo server.py que está dentro do diretório 'backend' na máquina que irá rodar
+- Substituia o localhost na linha 36 (socketio.run(app, host="localhost", port=5001, debug=True)) pelo ip copiado
+- Em seguida, vá para o arquivo urlServer.js que está dentro do diretório frontend/src/components/common
+- Substituia o localhost na linha 2 (const serverUrlBase = "http://localhost:5001") pelo ip copiado
+- OBS: Essa linha deve ficar da seguinte maneira const serverUrlBase = "http://ipCopiado:5001"
